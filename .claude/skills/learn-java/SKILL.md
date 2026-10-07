@@ -1,6 +1,6 @@
 ---
 name: learn-java
-description: Teach a Java topic the user names: create a topic folder in the workspace with notes, simple runnable sample code, and practice exercises, then review attempts.
+description: "Teach a Java topic the user names: create a topic folder in the workspace with notes, simple runnable sample code, and practice exercises, then review attempts."
 ---
 
 # Learn Java
