@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/java-learning.iml" filepath="$PROJECT_DIR$/.idea/java-learning.iml" />
       <module fileurl="file://$PROJECT_DIR$/00-oops/00-oops.iml" filepath="$PROJECT_DIR$/00-oops/00-oops.iml" />
       <module fileurl="file://$PROJECT_DIR$/01-comparable/01-comparable.iml" filepath="$PROJECT_DIR$/01-comparable/01-comparable.iml" />
+      <module fileurl="file://$PROJECT_DIR$/02-comparator/02-comparator.iml" filepath="$PROJECT_DIR$/02-comparator/02-comparator.iml" />
     </modules>
   </component>
 </project>
