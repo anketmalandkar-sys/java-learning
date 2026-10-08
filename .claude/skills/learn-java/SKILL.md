@@ -1,6 +1,6 @@
 ---
 name: learn-java
-description: "Teach a Java topic the user names: create a topic folder in the workspace with notes, simple runnable sample code, and practice exercises, then review attempts."
+description: "Teach a Java topic the user names: create a topic folder in the workspace with notes, simple runnable sample code, and practice exercises, then review attempts. Vast topics (e.g. Collections, Concurrency) are split into a roadmap of subtopics taught one at a time."
 ---
 
 # Learn Java
@@ -8,6 +8,20 @@ description: "Teach a Java topic the user names: create a topic folder in the wo
 The user invokes this skill with a Java topic (e.g. `/learn-java streams`, `/learn-java HashMap internals`). Teach it in the **explain-then-drill** style: a clear, concise explanation with simple examples, then exercises for the user to solve.
 
 If no topic is given, ask for one in a single short question and stop.
+
+## 0. Scope the topic
+
+Before creating anything, decide whether the topic is **focused** or **vast**:
+- **Focused**: one lesson covers it well (e.g. Comparator, lambdas, records, `equals`/`hashCode`). Follow steps 1-7 as written.
+- **Vast**: it splits naturally into parts that each deserve their own lesson (e.g. Collections, Concurrency, Streams API, Exceptions, Generics, I/O & NIO, JVM memory). Rule of thumb: if a good lesson would need more than ~5 core concepts, or the parts can be learned independently, it's vast.
+
+For a vast topic:
+- Split it into 3-8 ordered subtopics, basics first. Example, Collections: `01-collections-overview` (hierarchy, `Iterable`/`Collection`, the `Collections` utility class), `02-list`, `03-set`, `04-queue-deque`, `05-map`, `06-iteration-and-fail-fast`.
+- Teach **one subtopic per invocation**, as a full lesson (README, examples, exercises), using the "Vast topics" rules below.
+- Which subtopic to teach:
+  - `/learn-java collections` and no parent folder exists yet: create the parent (overview + roadmap) and teach subtopic 01.
+  - `/learn-java collections` and the parent exists: teach the first roadmap subtopic that has no folder yet. If all are done, say so and offer extras.
+  - `/learn-java collections map`, or a subtopic named on its own (e.g. `/learn-java HashMap`) that appears in an existing parent's roadmap: teach that subtopic inside the existing parent. Don't create a new top-level folder for it.
 
 ## 1. Set up the folder
 
@@ -32,6 +46,28 @@ java-learning/
       Solution1_*.java  <- NOT Exercise1_*.java: same class name would clash in the module
 ```
 
+### Vast topics
+
+The parent folder holds only the overview. Each subtopic is a full topic folder nested inside it:
+```
+java-learning/
+  04-collections/
+    README.md                      <- overview + roadmap (see "Parent README"); no code here
+    01-collections-overview/
+      04-collections_01-collections-overview.iml
+      README.md
+      examples/
+      exercises/
+      solutions/                   <- on request, as usual
+    02-list/
+      04-collections_02-list.iml
+      ...
+```
+- The parent gets the next top-level `NN` as usual. Subtopic folders are numbered `MM-` from `01` inside the parent, in roadmap order.
+- A subtopic folder follows every rule for a topic folder: the same README sections, 2 examples, 3 exercises, and solutions only on request.
+- Create a subtopic folder only when it's taught. The roadmap lists the rest.
+- Reuse: never overwrite an existing subtopic. Update the parent README's roadmap in place instead of rewriting it.
+
 ### Register with IntelliJ
 
 If the root has an `.idea/` folder, make the new topic runnable from the IDE. The user runs files with the green ▶ button, and without this IntelliJ treats the files as plain text.
@@ -54,6 +90,8 @@ If the root has an `.idea/` folder, make the new topic runnable from the IDE. Th
   ```
 - Add the module to `.idea/modules.xml` inside `<modules>`, and leave the existing entries alone:
   `<module fileurl="file://$PROJECT_DIR$/NN-topic-slug/NN-topic-slug.iml" filepath="$PROJECT_DIR$/NN-topic-slug/NN-topic-slug.iml" />`
+- **Vast topics:** one module per *subtopic*. The parent folder gets no `.iml`. Name the file `NN-parent_MM-sub.iml` (e.g. `04-collections_02-list.iml`). IntelliJ module names must be unique across the project, and a bare `01-basics.iml` could clash between two vast topics. The `.iml` content is the same as above. The `modules.xml` entry uses the nested path:
+  `<module fileurl="file://$PROJECT_DIR$/04-collections/02-list/04-collections_02-list.iml" filepath="$PROJECT_DIR$/04-collections/02-list/04-collections_02-list.iml" />`
 - When `solutions/` is created later, add a matching `<sourceFolder .../solutions>` line to that topic's `.iml`.
 - If an entry in `modules.xml` points at an `.iml` that no longer exists, tell the user and offer to remove it. Don't silently delete it.
 - If the root has no `.idea/`, skip this step.
@@ -70,6 +108,17 @@ Keep it tight and practical. Sections:
 6. **When to use / when not to**.
 7. **Interview angle**: 3-5 questions an interviewer would ask on this topic, with short answers.
 8. **Exercises**: list each exercise with its goal and difficulty.
+
+For a vast topic, each subtopic's README uses these sections. Add a one-line link back to the parent README at the top.
+
+### Parent README (vast topics only)
+
+Write it once, when the parent is created, and keep it short:
+1. **Big picture**: what the topic covers in 3-5 sentences, plus an ASCII diagram if it helps (e.g. the `Collection` interface tree).
+2. **Roadmap**: a table `# | Subtopic | What you'll learn | Status`. Status is ⬜ not started, 📖 in progress, or ✅ done. Link each taught subtopic to its folder.
+3. **How the pieces relate**: a short "which to pick when" guide (e.g. List vs Set vs Map vs Queue).
+
+Keep the roadmap current: mark a subtopic 📖 when it's taught, and ✅ once its exercises have been reviewed.
 
 ## 3. Write the sample code (examples/)
 
@@ -97,7 +146,7 @@ Rules:
 ## 6. Verify before handing over
 
 - If `java`/`javac` is available, compile and run every example and solution, and compile every exercise starter. Fix anything that fails. Check printed output matches the documented expected output.
-- Also compile the whole topic in one go, the way IntelliJ builds the module: `javac -d <scratchpad>/build examples/*.java exercises/*.java [solutions/*.java]`. This catches duplicate class names across files. Write the build output to the scratchpad, never into the topic folder.
+- Also compile the whole topic in one go, the way IntelliJ builds the module: `javac -d <scratchpad>/build examples/*.java exercises/*.java [solutions/*.java]`. This catches duplicate class names across files. Write the build output to the scratchpad, never into the topic folder. For a vast topic, do this in each subtopic folder taught in this run (each one is its own module).
 - If Java isn't available, say so in one line.
 
 ## 7. Reply to the user
@@ -107,5 +156,6 @@ Keep the chat reply short:
 - The folder path created and the files in it.
 - How to run: from a terminal in the topic folder, `java examples/Example1_Basics.java`; or in IntelliJ, the green ▶ next to `main` (mention Reload All from Disk if a module was just added).
 - A nudge to start with Exercise 1 and say when it's ready for review.
+- For a vast topic, also: the roadmap as a short list of subtopic names with the current one marked, and the exact command for the next one (e.g. `/learn-java collections set`).
 
 Don't paste the full README or code into chat; it's in the files.
