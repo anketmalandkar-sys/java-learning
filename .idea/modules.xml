@@ -7,6 +7,12 @@
       <module fileurl="file://$PROJECT_DIR$/01-comparable/01-comparable.iml" filepath="$PROJECT_DIR$/01-comparable/01-comparable.iml" />
       <module fileurl="file://$PROJECT_DIR$/02-comparator/02-comparator.iml" filepath="$PROJECT_DIR$/02-comparator/02-comparator.iml" />
       <module fileurl="file://$PROJECT_DIR$/03-lambda-expressions/03-lambda-expressions.iml" filepath="$PROJECT_DIR$/03-lambda-expressions/03-lambda-expressions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04-generics/01-generics-basics/04-generics_01-generics-basics.iml" filepath="$PROJECT_DIR$/04-generics/01-generics-basics/04-generics_01-generics-basics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04-generics/02-type-inference/04-generics_02-type-inference.iml" filepath="$PROJECT_DIR$/04-generics/02-type-inference/04-generics_02-type-inference.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04-generics/03-bounded-types/04-generics_03-bounded-types.iml" filepath="$PROJECT_DIR$/04-generics/03-bounded-types/04-generics_03-bounded-types.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04-generics/04-wildcards/04-generics_04-wildcards.iml" filepath="$PROJECT_DIR$/04-generics/04-wildcards/04-generics_04-wildcards.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04-generics/05-type-erasure/04-generics_05-type-erasure.iml" filepath="$PROJECT_DIR$/04-generics/05-type-erasure/04-generics_05-type-erasure.iml" />
+      <module fileurl="file://$PROJECT_DIR$/04-generics/06-generics-in-practice/04-generics_06-generics-in-practice.iml" filepath="$PROJECT_DIR$/04-generics/06-generics-in-practice/04-generics_06-generics-in-practice.iml" />
     </modules>
   </component>
 </project>
