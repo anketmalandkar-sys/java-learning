@@ -1,5 +1,7 @@
 # Pattern matching
 
+Source: https://dev.java/learn/language/fp/pattern-matching
+
 ## 1. What it is
 
 **Pattern matching** lets you test an object's shape and pull data out of it in one step. Each match has three parts:

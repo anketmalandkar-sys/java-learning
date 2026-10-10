@@ -210,3 +210,118 @@ Static (`Integer::parseInt`), instance method of an arbitrary object of a type (
 | 1 | `exercises/Exercise1_BasicLambdas.java` | Write lambdas and method references for the six core functional interfaces | Easy |
 | 2 | `exercises/Exercise2_ProductFilter.java` | Write a reusable filter/map helper and combine predicates and functions to build a shop's pricing rules | Medium |
 | 3 | `exercises/Exercise3_FraudAlertBug.java` | Find and fix three bugs in a bank's fraud-alert rules built from lambdas | Hard |
+
+## 9. Extra: method references in depth
+
+Source: https://dev.java/learn/language/fp/lambdas/method-references
+
+Added from the dev.java "Writing Lambda Expressions as Method References" page, which goes further than the table in section 3.
+
+**The four kinds, with their usual names**
+
+| Kind | Syntax | Equivalent lambda | Where the object comes from |
+|---|---|---|---|
+| Static | `Type::staticMethod` | `(a, b) -> Type.staticMethod(a, b)` | no object |
+| **Bound** | `expr::instanceMethod` | `(a) -> expr.instanceMethod(a)` | fixed **inside the reference** |
+| **Unbound** | `Type::instanceMethod` | `(obj, a) -> obj.instanceMethod(a)` | the lambda's **first argument** |
+| Constructor | `Type::new` | `(a) -> new Type(a)` | a new object |
+
+**Bound vs unbound** is the part that trips people up. `System.out::println` and `"Hello"::concat` are bound: the target object is already chosen. `String::length` and `String::concat` are unbound: they *look* like static calls, but the object to call them on arrives as the first argument.
+
+**Every kind can take several arguments.** The functional interface decides how many:
+```java
+IntBinaryOperator max = Math::max;                       // static, 2 args:  (a, b) -> Math.max(a, b)
+BinaryOperator<String> join = String::concat;            // unbound, 2 args: (s, t) -> s.concat(t)
+Comparator<String> ignoreCase = String::compareToIgnoreCase;   // unbound:   (s, t) -> s.compareToIgnoreCase(t)
+Function<String, String> greet = "Hello, "::concat;      // bound, 1 arg:   name -> "Hello, ".concat(name)
+ToIntFunction<String> length = String::length;           // unbound, 1 arg: s -> s.length()
+```
+For an unbound reference, the receiver is always the **first** parameter of the functional interface. That's why `String::compareToIgnoreCase` (one parameter) fits `Comparator<String>.compare(a, b)` (two).
+
+**Constructor references follow the target type.** `ArrayList::new` is not one constructor; the compiler picks the one that fits:
+```java
+Supplier<List<String>> empty = ArrayList::new;                         // new ArrayList<>()
+Function<Integer, List<String>> sized = ArrayList::new;                 // new ArrayList<>(capacity)
+Function<Collection<String>, List<String>> copied = ArrayList::new;     // new ArrayList<>(collection)
+```
+So a constructor reference needs a target type that says which one you mean. You can write a type argument (`ArrayList<String>::new`), but there's **no diamond**: `ArrayList<>::new` doesn't compile. Usually you just write `ArrayList::new` and let inference fill it in.
+
+**Gotchas**
+- `Integer::toString` is ambiguous for `Function<Integer, String>`: it matches both the static `Integer.toString(int)` and the unbound instance `toString()`. Use a lambda (`i -> i.toString()`) or `String::valueOf`.
+- A bound reference evaluates its target **once, when the reference is created**: `user.getName()::length` captures the name at that moment, not each time it's called.
+
+**Extra exercise**
+
+| # | File | Goal | Difficulty |
+|---|------|------|------------|
+| 4 | `exercises/Exercise4_MethodReferences.java` | Replace lambdas with the right kind of method reference: static, bound, unbound with extra arguments, and target-dependent constructor references | Medium |
+
+Example: `examples/Example3_MethodReferenceKinds.java`.
+
+## 10. Extra: the functional interface family and combinators
+
+Source: https://dev.java/learn/language/fp/lambdas/first-lambdas
+Source: https://dev.java/learn/language/fp/lambdas/functional-interfaces
+Source: https://dev.java/learn/language/fp/lambdas/combining-chaining-composing
+
+Added from three dev.java lambda pages, covering what sections 3-5 didn't.
+
+This lesson now covers the whole dev.java "Lambda Expressions" series ([index](https://dev.java/learn/language/fp/lambdas)): pages 1, 2 and 4 here, method references in section 9, and the comparator page in [02-comparator §9](../02-comparator/README.md#9-extra-the-contracts-symmetry-rule-and-the-two-thencomparings).
+
+**What a lambda can and can't implement.** A lambda implements the **one abstract method** of its interface, nothing else. It can't override a `default` method: calling `pred.negate()` on a lambda `Predicate` always runs `Predicate`'s own `negate()` code. If you need to override a default method, write a class.
+
+**Serializable lambdas.** A lambda is serializable only if its target type is. A plain `Runnable` lambda isn't, but an intersection cast makes it so:
+```java
+Runnable r = (Runnable & Serializable) () -> System.out.println("hi");   // r instanceof Serializable is true
+```
+You'll rarely need this; it matters when a lambda is stored in a field of a `Serializable` class.
+
+**The four families and their primitive versions.** `java.util.function` has 40+ interfaces, but they're all variations of four shapes. The primitive versions avoid boxing (see `09-numbers-and-strings/02-autoboxing`).
+
+| Family | Object version | `int` versions (also `long`, `double`) | Two-argument version |
+|---|---|---|---|
+| **Supplier**: nothing → value | `Supplier<T>.get()` | `IntSupplier.getAsInt()`, plus `BooleanSupplier.getAsBoolean()` | none |
+| **Consumer**: value → nothing | `Consumer<T>.accept(t)` | `IntConsumer.accept(int)` | `BiConsumer<T, U>`, `ObjIntConsumer<T>.accept(t, int)` |
+| **Predicate**: value → boolean | `Predicate<T>.test(t)` | `IntPredicate.test(int)` | `BiPredicate<T, U>` (no primitive version) |
+| **Function**: value → value | `Function<T, R>.apply(t)` | see the grid below | `BiFunction<T, U, R>`, `ToIntBiFunction<T, U>` |
+
+**The function grid.** The name tells you which side is primitive:
+
+| Interface | Takes | Returns | Method |
+|---|---|---|---|
+| `Function<T, R>` | `T` | `R` | `apply` |
+| `IntFunction<R>` | `int` | `R` | `apply` |
+| `ToIntFunction<T>` | `T` | `int` | `applyAsInt` |
+| `IntUnaryOperator` | `int` | `int` | `applyAsInt` |
+| `IntToLongFunction` | `int` | `long` | `applyAsLong` |
+| `UnaryOperator<T>` | `T` | `T` | `apply` (it extends `Function<T, T>`) |
+| `BinaryOperator<T>` / `IntBinaryOperator` | `T, T` / `int, int` | `T` / `int` | `apply` / `applyAsInt` |
+
+Naming rule: the method is `get`/`apply`/`accept`/`test`, plus `As<Type>` when it **returns** a primitive (`getAsInt`, `applyAsDouble`).
+
+**Collection methods that take lambdas, and their traps**
+```java
+list.forEach(System.out::println);          // Consumer: internal iteration (on every Iterable)
+list.removeIf(s -> s.isBlank());            // Predicate: removes matches; MUTATES the list
+list.replaceAll(String::trim);              // UnaryOperator: replaces each element in place
+```
+- `replaceAll` takes a `UnaryOperator<T>`, not a `Function<T, R>`, because a `List<String>` must stay a `List<String>`: the element type can't change.
+- `List.of(...)` is immutable: **both** methods throw `UnsupportedOperationException`, even when nothing would change.
+- `Arrays.asList(...)` is fixed-size: `replaceAll` **works** (it only sets elements), but `removeIf` throws as soon as an element matches.
+
+**More combinators.** The combining methods have to be `default` (or `static`) methods, because a functional interface may have only one abstract method:
+```java
+Predicate<String> notBlank = Predicate.not(String::isBlank);   // static factory (Java 11): reads better than s -> !s.isBlank()
+Predicate<String> isDuke = Predicate.isEqual("Duke");          // static factory: null-safe equals test
+Consumer<String> logThenPrint = log.andThen(System.out::println);   // both run, in order, on the same input
+Function<String, String> same = Function.identity();          // returns its input unchanged (e.g. as a "no-op" step or a map key)
+```
+`f.andThen(g)` and `g.compose(f)` build the **same** function. Only the reading order differs. The output type of the first must fit the input type of the second.
+
+**Extra exercise**
+
+| # | File | Goal | Difficulty |
+|---|------|------|------------|
+| 5 | `exercises/Exercise5_CombineAndSpecialize.java` | Pick the right primitive interfaces, build rules with `Predicate.not`, `isEqual`, `Consumer.andThen` and `Function.identity`, and avoid the `removeIf` traps | Medium |
+
+Example: `examples/Example4_FunctionalInterfaceFamily.java`.

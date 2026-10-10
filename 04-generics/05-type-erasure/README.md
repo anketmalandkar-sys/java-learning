@@ -209,3 +209,27 @@ You don't choose to "use" erasure, but you work with it in these situations:
 | 1 | `exercises/Exercise1_ErasureWorkarounds.java` | Get around `new T()`, `new T[]` and `instanceof List<String>` using `Supplier<T>`, `Class<T>` and `List<?>` | Easy |
 | 2 | `exercises/Exercise2_GenericArrayStack.java` | Build a generic stack backed by an array, and a `toArray` that returns a real `String[]`, not an `Object[]` in disguise | Medium |
 | 3 | `exercises/Exercise3_HeapPollutionBug.java` | A settings store and a varargs helper fail with `ClassCastException`s far from their cause. Fix them so they fail fast or can't fail, with zero warnings | Hard |
+
+## 9. Extra: casts the compiler can prove safe
+
+Source: https://dev.java/learn/language/fp/generics/restrictions
+
+Added from the dev.java "Restrictions on Generics" page. Section 3's table says a cast to a parameterized type gives an "unchecked" warning. That's true when the compiler **can't** prove the cast is right. When it can, the cast is allowed with **no warning**:
+
+```java
+List<String> list = new ArrayList<>();
+Collection<String> coll = list;
+Object obj = list;
+List<?> wild = list;
+
+ArrayList<String> a = (ArrayList<String>) list;   // no warning: only the class part changes, <String> is already known
+List<String> b = (List<String>) coll;             // no warning: same reason
+List<?> c = (List<?>) obj;                        // no warning: unbounded wildcard, nothing to check
+
+List<String> d = (List<String>) obj;              // unchecked warning: from Object, <String> can't be checked
+List<String> e = (List<String>) wild;             // unchecked warning: List<?> could be a List<Integer>
+```
+
+The rule of thumb: if the **type argument stays the same** (or the target is `<?>`), the runtime check on the class part (`ArrayList`, `List`) is all that's needed, so the cast is fully checked. If the cast would have to **invent** a type argument, the runtime can't verify it, and you get the warning.
+
+Example: `examples/Example3_ProvablySafeCasts.java`.

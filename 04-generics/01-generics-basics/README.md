@@ -183,3 +183,41 @@ list.get(0).equals(list.get(1))     // right
 | 1 | `exercises/Exercise1_PairAndHelpers.java` | Finish a generic `Pair<A, B>` with a `swap()`, and three generic helper methods | Easy |
 | 2 | `exercises/Exercise2_UndoHistory.java` | Build a generic `History<T>` with undo, plus a `map` that turns a `History<T>` into a `History<R>` | Medium |
 | 3 | `exercises/Exercise3_ShipmentRepoBug.java` | A repository crashes with `ClassCastException`. Find the three generics mistakes and make the compiler catch the bad call | Hard |
+
+## 9. Extra: naming conventions, raw-type rules, and subtypes with extra parameters
+
+Source: https://dev.java/learn/language/fp/generics/intro
+
+Added from the dev.java "Introducing Generics" page, covering what this lesson didn't.
+
+**Type parameter names.** Single upper-case letters, so they never look like a real class name:
+
+| Name | Usual meaning | Example |
+|---|---|---|
+| `T` | Type | `Box<T>` |
+| `E` | Element (collections) | `List<E>` |
+| `K`, `V` | Key, Value | `Map<K, V>` |
+| `N` | Number | `<N extends Number> N max(N a, N b)` |
+| `R` | Result | `Function<T, R>` |
+| `S`, `U`, `V` | 2nd, 3rd, 4th types | `<T, U> Pair<T, U> zip(...)` |
+
+**Raw-type assignment rules.** Mixing raw and parameterized types compiles, for compatibility with pre-Java-5 code, but only one direction is silent:
+```java
+Box<String> typed = new Box<>();
+Box raw = typed;              // parameterized -> raw: allowed, no unchecked warning
+Box<Integer> wrong = raw;     // raw -> parameterized: "unchecked conversion" warning
+raw.set(8);                   // calling a generic method through a raw type: "unchecked call" warning
+```
+The last two lines are how a `Box<String>` ends up holding an `Integer`. **`-Xlint:unchecked`** lists every such line, and **`-Xlint:-unchecked`** (note the minus) turns those warnings off entirely. Don't use that on real code: suppress single, proven-safe lines with `@SuppressWarnings("unchecked")` instead.
+
+**Subtypes can add their own type parameters.** Subtyping only needs the *shared* type argument to match; extra parameters on the subtype don't matter:
+```java
+interface PayloadList<E, P> extends List<E> {
+    void setPayload(int index, P payload);
+}
+List<String> a = payloadListOfStringAndString;    // PayloadList<String, String>  is a List<String>
+List<String> b = payloadListOfStringAndInteger;   // PayloadList<String, Integer> is a List<String>
+List<String> c = payloadListOfIntegerAndString;   // compile error: PayloadList<Integer, String> is a List<Integer>
+```
+
+Example: `examples/Example3_RawTypesAndSubtypes.java`.

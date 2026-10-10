@@ -166,3 +166,15 @@ The goal is readability. A pipeline that needs a paragraph of comments is worse 
 | 1 | `exercises/Exercise1_LoopsToRanges.java` | Easy | Rewrite three counting loops with `rangeClosed`, 3-argument `iterate`, and `iterate` + `takeWhile` |
 | 2 | `exercises/Exercise2_EmployeeReports.java` | Medium | Rewrite three employee reports (foreach + if + transformation) with `filter`, `map`, `mapToInt`, `groupingBy` |
 | 3 | `exercises/Exercise3_LogReportBug.java` | Hard | A "refactored" log report has three bugs: a reused stream, `limit` in the wrong place, and `filter` instead of `takeWhile` |
+
+## 9. dev.java pages covered
+
+Source: https://dev.java/learn/language/fp/refactoring-to-functional-style
+
+| dev.java page | Covered in this lesson |
+|---|---|
+| [Converting Simple Loops](https://dev.java/learn/language/fp/refactoring-to-functional-style/simple-loops) | §1, §3 (`range`, `rangeClosed`, internal iteration) |
+| [Converting Loops with Steps](https://dev.java/learn/language/fp/refactoring-to-functional-style/loops-with-steps) | §3 (`iterate` with 3 arguments, `iterate` + `takeWhile`) |
+| [Converting foreach with if](https://dev.java/learn/language/fp/refactoring-to-functional-style/for-each-with-if) | §3 (`forEach`, `filter`), §4 (lazy operations) |
+| [Converting Iteration with Transformation](https://dev.java/learn/language/fp/refactoring-to-functional-style/iteration-with-transformation) | §3 (`map`, filter before map) |
+| [Converting Data Sources to Streams](https://dev.java/learn/language/fp/refactoring-to-functional-style/converting-to-streams) | §1, §3, §5 (`Files.lines`, try-with-resources) |

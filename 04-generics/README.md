@@ -36,3 +36,17 @@ All lessons are written. Work through them in order, and mark each one ✅ once 
 - **A method should accept "a list of any kind of number"?** That needs a **wildcard** (**04**): `List<? extends Number>`.
 - **Confused by a compiler error like "cannot create a generic array" or an "unchecked" warning?** That's **erasure** (**05**).
 - **Designing an API others will use** (a repository, a result type, a fluent builder)? Put it all together in **06**.
+
+## 4. dev.java "Generics" tutorial
+
+Source: https://dev.java/learn/language/fp/generics
+
+Every page of the tutorial is covered by the lessons above. Where a page had extra details, they were added as a section 9 and an `Example3_*.java` in the matching lesson.
+
+| dev.java page | Covered in | Added |
+|---|---|---|
+| [Introducing Generics](https://dev.java/learn/language/fp/generics/intro) | 01, 03 | [01 §9](01-generics-basics/README.md#9-extra-naming-conventions-raw-type-rules-and-subtypes-with-extra-parameters): naming conventions, raw-type assignment rules, `-Xlint:-unchecked`, subtypes with extra type parameters |
+| [Type Inference](https://dev.java/learn/language/fp/generics/type-inference) | 02 | nothing missing |
+| [Wildcards](https://dev.java/learn/language/fp/generics/wildcards) | 04 | [04 §9](04-wildcards/README.md#9-extra-class-and-one-bound-per-wildcard): `Class<?>`, one bound per wildcard |
+| [Type Erasure](https://dev.java/learn/language/fp/generics/type-erasure) | 05 | nothing missing |
+| [Restrictions on Generics](https://dev.java/learn/language/fp/generics/restrictions) | 05 | [05 §9](05-type-erasure/README.md#9-extra-casts-the-compiler-can-prove-safe): casts the compiler can prove safe |

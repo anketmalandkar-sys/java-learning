@@ -242,3 +242,32 @@ static void swapFirst(List<? extends Number> a, List<? extends Number> b) {
 | 1 | `exercises/Exercise1_WildcardSignatures.java` | Every parameter starts as `List<?>`. Choose `? extends`, `? super` or `?` for each method, then implement it | Easy |
 | 2 | `exercises/Exercise2_TaskQueue.java` | Give a generic `TaskQueue<T>` PECS-style `addAll`, `drainTo`, `removeIf` and `forEach`, and write a wildcard capture helper | Medium |
 | 3 | `exercises/Exercise3_ReportUtilsBug.java` | Report helpers use raw casts and wildcard return types. Customer names end up in a list of sales figures. Fix the signatures so the compiler catches it | Hard |
+
+## 9. Extra: `Class<?>`, and one bound per wildcard
+
+Source: https://dev.java/learn/language/fp/generics/wildcards
+
+Added from the dev.java "Wildcards" page, covering what this lesson didn't.
+
+**Why `Class<?>` is everywhere.** `Class<T>` is generic: `String.class` is a `Class<String>`. But most of its methods (`getName()`, `getSimpleName()`, `getSuperclass()`, `isInterface()`, `getMethods()`) don't depend on `T`, so code that handles *any* class uses the unbounded wildcard:
+```java
+static String describe(Class<?> type) {           // accepts String.class, Integer.class, int.class, ...
+    return type.getSimpleName() + (type.isInterface() ? " (interface)" : "");
+}
+List<Class<?>> types = List.of(String.class, List.class, int.class);
+Object o = ...;
+Class<?> runtime = o.getClass();                  // getClass() returns Class<? extends |X|>; Class<?> is the usual way to hold it
+```
+`Class<? extends Number>` is the bounded form, for "a class object of some kind of number".
+
+**A wildcard has one bound, at most.** Either an upper bound or a lower bound, never both, and never several:
+```java
+List<? extends Number>                       // fine
+List<? super Integer>                        // fine
+List<? extends Number super Integer>         // compile error
+List<? extends Number & Comparable<?>>       // compile error: & isn't allowed on a wildcard
+<T extends Number & Comparable<T>>           // fine: multiple bounds are for TYPE PARAMETERS (lesson 03)
+```
+If you need "a number that is also comparable", name the type with a type parameter and give it multiple bounds.
+
+Example: `examples/Example3_ClassWildcardAndBounds.java`.

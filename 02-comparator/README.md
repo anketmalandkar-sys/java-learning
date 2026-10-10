@@ -207,3 +207,28 @@ Integer overflow. If `a.x` is large positive and `b.x` large negative, the subtr
 | 1 | `exercises/Exercise1_MovieSort.java` | Sort movies three different ways using `Comparator` factory methods | Easy |
 | 2 | `exercises/Exercise2_EmployeeDirectory.java` | Multi-field sort with mixed ascending/descending, plus null handling | Medium |
 | 3 | `exercises/Exercise3_TaskQueueBug.java` | Find and fix the bugs in a task scheduler built on `PriorityQueue` and `TreeSet` | Hard |
+
+## 9. Extra: the contract's symmetry rule, and the two `thenComparing`s
+
+Source: https://dev.java/learn/language/fp/lambdas/writing-comparators
+
+Added from the dev.java "Writing and Combining Comparators" page.
+
+**Antisymmetry.** Besides the sign rule in section 3, a comparator must agree with itself when the arguments are swapped: `compare(a, b)` and `compare(b, a)` must have **opposite signs** (or both be 0). Break it and sorting can give different results depending on the input order, and `TimSort` may even throw `IllegalArgumentException: Comparison method violates its general contract!`.
+```java
+// WRONG: never returns a negative number, so compare(a, b) and compare(b, a) can both be 1
+Comparator<Task> urgentFirst = (a, b) -> a.isUrgent() ? -1 : 1;
+// RIGHT: both directions are consistent, and two urgent tasks compare as 0
+Comparator<Task> urgentFirst = Comparator.comparing(Task::isUrgent).reversed();   // true before false
+```
+
+**Two kinds of `thenComparing`.** Pass a key extractor, or a whole comparator, which is handy when you already have one, e.g. a reusable `byName`:
+```java
+Comparator<Employee> byName = Comparator.comparing(Employee::getName);
+
+Comparator.comparing(Employee::getDepartment).thenComparing(Employee::getSalary)   // a key extractor
+Comparator.comparing(Employee::getDepartment).thenComparing(byName)                // a whole comparator
+Comparator.comparing(Employee::getDepartment).thenComparingInt(Employee::getAge)   // primitive key, no boxing
+```
+
+Example: `examples/Example3_ComparatorContract.java`.
