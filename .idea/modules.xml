@@ -17,6 +17,7 @@
       <module fileurl="file://$PROJECT_DIR$/05-strings/02-string-api/05-strings_02-string-api.iml" filepath="$PROJECT_DIR$/05-strings/02-string-api/05-strings_02-string-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/05-strings/03-building-strings/05-strings_03-building-strings.iml" filepath="$PROJECT_DIR$/05-strings/03-building-strings/05-strings_03-building-strings.iml" />
       <module fileurl="file://$PROJECT_DIR$/05-strings/04-unicode-and-encoding/05-strings_04-unicode-and-encoding.iml" filepath="$PROJECT_DIR$/05-strings/04-unicode-and-encoding/05-strings_04-unicode-and-encoding.iml" />
+      <module fileurl="file://$PROJECT_DIR$/06-pattern-matching/06-pattern-matching.iml" filepath="$PROJECT_DIR$/06-pattern-matching/06-pattern-matching.iml" />
     </modules>
   </component>
 </project>
