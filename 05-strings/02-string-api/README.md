@@ -196,3 +196,70 @@ if (name.isBlank())   // right
 | 1 | `exercises/Exercise1_TextHelpers.java` | Initials, card masking, palindromes and word counting with `split`, `substring`, `indexOf` and `repeat` | Easy |
 | 2 | `exercises/Exercise2_OrderLineParser.java` | Parse messy pipe-separated order lines (spaces, blank lines, empty fields) and print an aligned table with `format` | Medium |
 | 3 | `exercises/Exercise3_SlugBug.java` | A release-notes tool builds broken URL slugs on the production server. Find the regex and locale bugs | Hard |
+
+## 9. Extra: conversions, region matching and text-block escapes
+
+Source: https://dev.java/learn/language/constructs/numbers-strings/strings
+
+Added from the dev.java "Strings" page, covering the parts this lesson didn't.
+
+**String → number.** Each wrapper has `parseXxx` (returns a primitive) and `valueOf` (returns the wrapper object). Bad input throws `NumberFormatException`, so validate or catch.
+```java
+int qty = Integer.parseInt("12");
+double price = Double.parseDouble("19.99");
+Long id = Long.valueOf("9000000000");
+boolean flag = Boolean.parseBoolean("TRUE");   // true; anything except "true" (any case) is false
+Integer.parseInt(" 12")                        // NumberFormatException: strip() first
+```
+
+**Number → string.**
+```java
+String.valueOf(42)        // "42"   works for every primitive and Object (null -> "null")
+Integer.toString(42)      // "42"
+Double.toString(0.1)      // "0.1"
+"" + 42                   // "42"   works, but says less about intent
+```
+
+**Comparing part of a string.**
+```java
+String log = "2024-03-09 ERROR disk full";
+log.startsWith("ERROR", 11)                       // true: prefix check at an offset
+log.regionMatches(11, "error", 0, 5)              // false: case-sensitive
+log.regionMatches(true, 11, "error", 0, 5)        // true: ignoreCase = true
+```
+`regionMatches(ignoreCase, thisOffset, other, otherOffset, length)` compares `length` chars of each string starting at the two offsets, without creating substrings.
+
+**`matches(regex)`**: true only if the **whole** string matches.
+```java
+"ORD-0042".matches("[A-Z]{3}-\\d{4}")   // true
+"x ORD-0042".matches("[A-Z]{3}-\\d{4}") // false: matches() isn't "contains"
+```
+
+**Smaller helpers.**
+```java
+"hello".lastIndexOf('l')            // 3   search from the end
+"a.b.c".lastIndexOf('.', 2)         // 1   search backwards starting at index 2
+"hello".subSequence(1, 4)           // "ell" as a CharSequence
+"hello".concat(" world")            // "hello world"
+"hello".replaceFirst("l", "L")      // "heLlo"
+char[] buf = new char[3];
+"hello".getChars(1, 4, buf, 0);     // buf = ['e','l','l']: copy chars into an existing array
+```
+
+**Text-block escapes (Java 15+).** Text blocks strip trailing spaces from every line, and every line break becomes `\n`. Two escapes control that:
+```java
+String s = """
+        Name:\s
+        One long \
+        line
+        """;
+// "Name: \nOne long line\n"   \s keeps a trailing space, a trailing \ joins two lines
+```
+
+**Extra exercise**
+
+| # | File | Goal | Difficulty |
+|---|------|------|------------|
+| 4 | `exercises/Exercise4_RecordParser.java` | Parse and validate a fixed-format record with `parseInt`/`parseDouble`, `matches`, `regionMatches` and `lastIndexOf` | Medium |
+
+Example: `examples/Example3_ConversionsAndRegions.java`.

@@ -25,6 +25,8 @@ Strings
 
 All lessons are written. Work through them in order, and mark each one ✅ once its exercises have been reviewed.
 
+Extras from the dev.java "Numbers and Strings" tutorial were added to lessons 02, 03 and 04: each has a new section 9 in its README, an `Example3_*.java` and an `Exercise4_*.java`. See also [09-numbers-and-strings](../09-numbers-and-strings/README.md).
+
 ## 3. How the pieces relate
 
 - **Comparing two strings?** Learn **01** first: `equals`, never `==`.

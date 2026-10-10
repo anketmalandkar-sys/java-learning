@@ -150,3 +150,56 @@ String.join(", ", items)                            // "a, b, c"
 | 1 | `exercises/Exercise1_BuilderBasics.java` | Reverse words, build a CSV row, draw a progress bar and compress repeated letters with `StringBuilder` | Easy |
 | 2 | `exercises/Exercise2_ReceiptPrinter.java` | Print an aligned shop receipt with `StringBuilder` + `format`, and a one-line summary with `Collectors.joining` | Medium |
 | 3 | `exercises/Exercise3_SlowReportBug.java` | A nightly report takes seconds, loses its opening bracket, and never sees it's unchanged. Fix the three builder bugs | Hard |
+
+## 9. Extra: length, capacity and editing in place
+
+Source: https://dev.java/learn/language/constructs/numbers-strings/string-builders
+
+Added from the dev.java "String Builders" page, covering the parts this lesson didn't.
+
+**Length vs capacity.** A `StringBuilder` is a resizable `char` array. `length()` is how many characters are **in use**; `capacity()` is how many fit **before it must grow**. Capacity is always ≥ length.
+
+| Constructor | Starting length | Starting capacity |
+|---|---|---|
+| `new StringBuilder()` | 0 | 16 |
+| `new StringBuilder(100)` | 0 | 100 |
+| `new StringBuilder("Greetings")` | 9 | 9 + 16 = 25 |
+| `new StringBuilder(charSequence)` | its length | its length + 16 |
+
+When an append doesn't fit, the builder allocates a bigger array (roughly double) and copies the content. If you know the final size, pass it to the constructor or call `ensureCapacity(n)` to avoid repeated copying. `trimToSize()` shrinks the capacity down to the length.
+
+**`setLength(n)`**: shorter than now → truncates; longer → pads with `'\u0000'` (null) characters, **not** spaces.
+```java
+StringBuilder sb = new StringBuilder("Hello, world");
+sb.setLength(5);      // "Hello"
+sb.setLength(0);      // "" : the cheap way to reuse a builder
+```
+
+**Editing in place.** Every method changes the builder itself (and returns it, so calls chain). Ranges are `start` inclusive, `end` exclusive, like `substring`.
+```java
+StringBuilder sb = new StringBuilder("Java is fun");
+sb.insert(0, ">> ");            // ">> Java is fun"
+sb.replace(3, 7, "Kotlin");     // ">> Kotlin is fun"
+sb.delete(0, 3);                // "Kotlin is fun"
+sb.deleteCharAt(sb.length() - 1); // "Kotlin is fu"
+sb.setCharAt(0, 'k');           // "kotlin is fu"
+sb.reverse();                   // "uf si niltok"
+sb.indexOf("si");               // 3: builders can search too
+sb.charAt(0);                   // 'u'
+String done = sb.toString();    // a snapshot String
+```
+
+To use a `String`-only method (like `split` or `matches`), call `toString()` first; to go back, pass the result to `new StringBuilder(String)`.
+
+**Gotchas**
+- Deleting characters in a forward loop skips characters, because everything after the deleted one shifts left. Loop **backwards** (`for (int i = sb.length() - 1; i >= 0; i--)`).
+- `capacity()` isn't a size you should rely on in logic; it's a performance detail.
+- Since Java 9, a single `a + b + c` expression is compiled efficiently. `StringBuilder` matters for loops and for editing (insert/delete/replace), not for one-line joins.
+
+**Extra exercise**
+
+| # | File | Goal | Difficulty |
+|---|------|------|------------|
+| 4 | `exercises/Exercise4_EditInPlace.java` | Mask a card number, add thousands separators, strip vowels, and truncate with `insert`, `replace`, `setCharAt`, `deleteCharAt` and `setLength` | Medium |
+
+Example: `examples/Example3_EditingInPlace.java`.

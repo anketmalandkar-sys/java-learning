@@ -154,3 +154,51 @@ s.codePoints().allMatch(Character::isLetter)           // right
 | 1 | `exercises/Exercise1_CountingCharacters.java` | Count code points and UTF-8 bytes, detect ASCII, and describe a string as `U+XXXX` codes | Easy |
 | 2 | `exercises/Exercise2_SafeTruncate.java` | Truncate text to N code points or N bytes without ever splitting a character, and get an emoji-safe initial | Medium |
 | 3 | `exercises/Exercise3_UsernameBug.java` | A sign-up service rejects valid emoji names, shows `JosÃ©`, and says "José" isn't "José". Fix the three Unicode bugs | Hard |
+
+## 9. Extra: Character helpers and escape sequences
+
+Source: https://dev.java/learn/language/constructs/numbers-strings/characters
+
+Added from the dev.java "Characters" page, which covers two things this lesson didn't.
+
+**`Character` is the wrapper for `char`.** It's immutable, and autoboxing converts between the two (`Character c = 'a';`). Its static helpers classify and convert single characters:
+
+```java
+Character.isLetter('é')        // true: works for every alphabet, not just a-z
+Character.isDigit('7')         // true (also true for other scripts' digits, e.g. '٧')
+Character.isLetterOrDigit('_') // false
+Character.isWhitespace('\t')   // true: space, tab, newline, ...
+Character.isUpperCase('Q')     // true
+Character.isLowerCase('q')     // true
+Character.toUpperCase('q')     // 'Q'
+Character.toLowerCase('Q')     // 'q'
+Character.toString('x')        // "x"
+Character.getNumericValue('7') // 7: the digit's value, not its code (which is 55)
+```
+
+Each helper has a `char` version and an `int` (code point) version. Only the `int` versions handle supplementary characters (emoji and other code points above `U+FFFF`, see section 3), so prefer `Character.isLetter(text.codePointAt(i))` over `isLetter(text.charAt(i))` for text that might contain them.
+
+**Gotcha: `'7' - '0'` vs `(int) '7'`.** `(int) '7'` is the character code 55. To get the digit value, use `Character.getNumericValue('7')` or `'7' - '0'` (only safe for ASCII digits).
+
+**Escape sequences.** A backslash gives the next character a special meaning in `char` and `String` literals:
+
+| Escape | Meaning |
+|---|---|
+| `\t` | tab |
+| `\n` | newline |
+| `\r` | carriage return (Windows line endings are `\r\n`) |
+| `\b` | backspace |
+| `\f` | form feed |
+| `\s` | a space (Java 15+); mainly used to keep trailing spaces in text blocks |
+| `\'` | single quote, needed in a `char` literal: `'\''` |
+| `\"` | double quote, needed inside a `String`: `"say \"hi\""` |
+| `\\` | a backslash itself: `"C:\\temp"` |
+| `\` at the end of a line | inside a text block only: joins the next line, no newline inserted |
+
+**Extra exercise**
+
+| # | File | Goal | Difficulty |
+|---|------|------|------------|
+| 4 | `exercises/Exercise4_PasswordRules.java` | Check password rules with `Character` helpers, count character kinds, and build strings that need escapes | Medium |
+
+Example: `examples/Example3_CharacterHelpers.java`.
