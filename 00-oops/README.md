@@ -15,6 +15,32 @@ Start with **[OOPS.md](OOPS.md)** for the theory. Then run each demo in order. E
 | 9 | [relationships/CompositionDemo.java](relationships/CompositionDemo.java) | Strong whole/part: parts are created inside and die with the whole |
 | 10 | [relationships/CompositionOverInheritance.java](relationships/CompositionOverInheritance.java) | Why `Stack extends ArrayList` is bad, and delegation as the fix |
 
+### Added from dev.java "Object Oriented Programming"
+
+These fill the gaps the demos above didn't cover. New topics (nested classes, enums, records, `Object`'s methods, packages) are full lessons in [10-object-oriented-programming](../10-object-oriented-programming/README.md).
+
+| # | File | What it teaches | Exercise |
+|---|---|---|---|
+| 11 | [basics/ParametersAndObjects.java](basics/ParametersAndObjects.java) | Varargs, pass-by-value for primitives vs references, parameter shadowing, private constructors + static factories, when objects become unreachable | [Exercise1_ParametersAndObjects](exercises/Exercise1_ParametersAndObjects.java) |
+| 12 | [basics/InitializationOrder.java](basics/InitializationOrder.java) | Static and instance initializer blocks, full parent/child initialization order, compile-time constant inlining, static calls through an instance | [Exercise2_PredictInitOrder](exercises/Exercise2_PredictInitOrder.java) |
+| 13 | [inheritance/OverridingRules.java](inheritance/OverridingRules.java) | Widening access, instance/static mismatch, overloading in a subclass, field hiding, overridable calls in constructors, default-method resolution, static interface methods | [Exercise3_OverridingTraps](exercises/Exercise3_OverridingTraps.java) |
+| 14 | [abstraction/InterfaceAndAbstractRules.java](abstraction/InterfaceAndAbstractRules.java) | Private/static/default interface methods, constants, interfaces extending several, evolving a published interface, interface-typed parameters, abstract classes implementing an interface partially | [Exercise4_EvolveTheInterface](exercises/Exercise4_EvolveTheInterface.java) |
+
+Sources for these additions:
+
+Source: https://dev.java/learn/language/oop/classes-objects/defining-constructors
+Source: https://dev.java/learn/language/oop/classes-objects/calling-methods-constructors
+Source: https://dev.java/learn/language/oop/classes-objects/creating-objects
+Source: https://dev.java/learn/language/oop/classes-objects/more-on-classes
+Source: https://dev.java/learn/language/oop/inheritance/what-is-inheritance
+Source: https://dev.java/learn/language/oop/inheritance/overriding
+Source: https://dev.java/learn/language/oop/inheritance/polymorphism
+Source: https://dev.java/learn/language/oop/inheritance/abstract-classes
+Source: https://dev.java/learn/language/oop/interfaces/defining-interfaces
+Source: https://dev.java/learn/language/oop/interfaces/examples
+
+The exercises print PASS/FAIL. Run them like the demos, e.g. `java -cp out oops.exercises.Exercise1_ParametersAndObjects`.
+
 ## How to run
 
 Requires **JDK 21+** (uses records, sealed types, and pattern-matching `switch`).
@@ -25,7 +51,7 @@ Requires **JDK 21+** (uses records, sealed types, and pattern-matching `switch`)
 
 ```powershell
 # compile everything into ./out
-javac -d out (Get-ChildItem -Recurse oops -Filter *.java).FullName
+javac -d out (Get-ChildItem -Recurse 00-oops -Filter *.java).FullName
 
 # run a demo
 java -cp out oops.relationships.CompositionDemo
@@ -33,6 +59,6 @@ java -cp out oops.relationships.CompositionDemo
 
 ```bash
 # Git Bash / Linux / macOS
-javac -d out $(find oops -name '*.java')
+javac -d out $(find 00-oops -name '*.java')
 java -cp out oops.polymorphism.PolymorphismDemo
 ```
