@@ -2,7 +2,7 @@
 
 Source: https://dev.java/learn/language/annotations-exceptions/exceptions/catching-handling
 
-← Back to [Annotations and Exceptions](../README.md) · A first look at try-with-resources is in [10-object-oriented-programming/04-object-superclass](../../10-object-oriented-programming/04-object-superclass/README.md).
+← Back to [Annotations and Exceptions](../README.md) · A first look at try-with-resources is in [00-oops/06-object-superclass](../../00-oops/06-object-superclass/README.md).
 
 ## 1. What it is
 

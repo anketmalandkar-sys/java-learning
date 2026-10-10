@@ -79,7 +79,7 @@ Conventions: extend **`Exception`** (checked) for recoverable problems, `Runtime
 
 - The stack trace is captured in the `Throwable` **constructor** (`fillInStackTrace()`), not at the `throw`. Creating an exception is relatively expensive because of that; don't use exceptions for normal control flow.
 - `throw` evaluates its expression; if it's `null`, you get a `NullPointerException` instead.
-- `throws` clauses are checked by the compiler only. An overriding method may declare **fewer or narrower** checked exceptions than the method it overrides, never broader ones (see `00-oops`).
+- `throws` clauses are checked by the compiler only. An overriding method may declare **fewer or narrower** checked exceptions than the method it overrides, never broader ones (see `00-oops/05-inheritance`).
 - The cause chain is just a linked list of `Throwable`s via `getCause()`. Walking it to the end gives the **root cause**.
 
 ## 5. Common mistakes and gotchas

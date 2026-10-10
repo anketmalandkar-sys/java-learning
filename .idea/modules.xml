@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/java-learning.iml" filepath="$PROJECT_DIR$/.idea/java-learning.iml" />
-      <module fileurl="file://$PROJECT_DIR$/00-oops/00-oops.iml" filepath="$PROJECT_DIR$/00-oops/00-oops.iml" />
       <module fileurl="file://$PROJECT_DIR$/01-comparable/01-comparable.iml" filepath="$PROJECT_DIR$/01-comparable/01-comparable.iml" />
       <module fileurl="file://$PROJECT_DIR$/02-comparator/02-comparator.iml" filepath="$PROJECT_DIR$/02-comparator/02-comparator.iml" />
       <module fileurl="file://$PROJECT_DIR$/03-lambda-expressions/03-lambda-expressions.iml" filepath="$PROJECT_DIR$/03-lambda-expressions/03-lambda-expressions.iml" />
@@ -31,15 +30,19 @@
       <module fileurl="file://$PROJECT_DIR$/08-java-language-basics/10-switch-expression/08-java-language-basics_10-switch-expression.iml" filepath="$PROJECT_DIR$/08-java-language-basics/10-switch-expression/08-java-language-basics_10-switch-expression.iml" />
       <module fileurl="file://$PROJECT_DIR$/09-numbers-and-strings/01-numbers/09-numbers-and-strings_01-numbers.iml" filepath="$PROJECT_DIR$/09-numbers-and-strings/01-numbers/09-numbers-and-strings_01-numbers.iml" />
       <module fileurl="file://$PROJECT_DIR$/09-numbers-and-strings/02-autoboxing/09-numbers-and-strings_02-autoboxing.iml" filepath="$PROJECT_DIR$/09-numbers-and-strings/02-autoboxing/09-numbers-and-strings_02-autoboxing.iml" />
-      <module fileurl="file://$PROJECT_DIR$/10-object-oriented-programming/01-nested-classes/10-object-oriented-programming_01-nested-classes.iml" filepath="$PROJECT_DIR$/10-object-oriented-programming/01-nested-classes/10-object-oriented-programming_01-nested-classes.iml" />
-      <module fileurl="file://$PROJECT_DIR$/10-object-oriented-programming/02-enums/10-object-oriented-programming_02-enums.iml" filepath="$PROJECT_DIR$/10-object-oriented-programming/02-enums/10-object-oriented-programming_02-enums.iml" />
-      <module fileurl="file://$PROJECT_DIR$/10-object-oriented-programming/03-records/10-object-oriented-programming_03-records.iml" filepath="$PROJECT_DIR$/10-object-oriented-programming/03-records/10-object-oriented-programming_03-records.iml" />
-      <module fileurl="file://$PROJECT_DIR$/10-object-oriented-programming/04-object-superclass/10-object-oriented-programming_04-object-superclass.iml" filepath="$PROJECT_DIR$/10-object-oriented-programming/04-object-superclass/10-object-oriented-programming_04-object-superclass.iml" />
-      <module fileurl="file://$PROJECT_DIR$/10-object-oriented-programming/05-packages/10-object-oriented-programming_05-packages.iml" filepath="$PROJECT_DIR$/10-object-oriented-programming/05-packages/10-object-oriented-programming_05-packages.iml" />
-      <module fileurl="file://$PROJECT_DIR$/11-annotations-exceptions/01-annotations/11-annotations-exceptions_01-annotations.iml" filepath="$PROJECT_DIR$/11-annotations-exceptions/01-annotations/11-annotations-exceptions_01-annotations.iml" />
-      <module fileurl="file://$PROJECT_DIR$/11-annotations-exceptions/02-what-is-an-exception/11-annotations-exceptions_02-what-is-an-exception.iml" filepath="$PROJECT_DIR$/11-annotations-exceptions/02-what-is-an-exception/11-annotations-exceptions_02-what-is-an-exception.iml" />
-      <module fileurl="file://$PROJECT_DIR$/11-annotations-exceptions/03-catching-handling/11-annotations-exceptions_03-catching-handling.iml" filepath="$PROJECT_DIR$/11-annotations-exceptions/03-catching-handling/11-annotations-exceptions_03-catching-handling.iml" />
-      <module fileurl="file://$PROJECT_DIR$/11-annotations-exceptions/04-throwing-exceptions/11-annotations-exceptions_04-throwing-exceptions.iml" filepath="$PROJECT_DIR$/11-annotations-exceptions/04-throwing-exceptions/11-annotations-exceptions_04-throwing-exceptions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/10-annotations-exceptions/01-annotations/10-annotations-exceptions_01-annotations.iml" filepath="$PROJECT_DIR$/10-annotations-exceptions/01-annotations/10-annotations-exceptions_01-annotations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/10-annotations-exceptions/02-what-is-an-exception/10-annotations-exceptions_02-what-is-an-exception.iml" filepath="$PROJECT_DIR$/10-annotations-exceptions/02-what-is-an-exception/10-annotations-exceptions_02-what-is-an-exception.iml" />
+      <module fileurl="file://$PROJECT_DIR$/10-annotations-exceptions/03-catching-handling/10-annotations-exceptions_03-catching-handling.iml" filepath="$PROJECT_DIR$/10-annotations-exceptions/03-catching-handling/10-annotations-exceptions_03-catching-handling.iml" />
+      <module fileurl="file://$PROJECT_DIR$/10-annotations-exceptions/04-throwing-exceptions/10-annotations-exceptions_04-throwing-exceptions.iml" filepath="$PROJECT_DIR$/10-annotations-exceptions/04-throwing-exceptions/10-annotations-exceptions_04-throwing-exceptions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/01-classes-objects/00-oops_01-classes-objects.iml" filepath="$PROJECT_DIR$/00-oops/01-classes-objects/00-oops_01-classes-objects.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/02-nested-classes/00-oops_02-nested-classes.iml" filepath="$PROJECT_DIR$/00-oops/02-nested-classes/00-oops_02-nested-classes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/03-enums/00-oops_03-enums.iml" filepath="$PROJECT_DIR$/00-oops/03-enums/00-oops_03-enums.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/04-records/00-oops_04-records.iml" filepath="$PROJECT_DIR$/00-oops/04-records/00-oops_04-records.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/05-inheritance/00-oops_05-inheritance.iml" filepath="$PROJECT_DIR$/00-oops/05-inheritance/00-oops_05-inheritance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/06-object-superclass/00-oops_06-object-superclass.iml" filepath="$PROJECT_DIR$/00-oops/06-object-superclass/00-oops_06-object-superclass.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/07-interfaces/00-oops_07-interfaces.iml" filepath="$PROJECT_DIR$/00-oops/07-interfaces/00-oops_07-interfaces.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/08-packages/00-oops_08-packages.iml" filepath="$PROJECT_DIR$/00-oops/08-packages/00-oops_08-packages.iml" />
+      <module fileurl="file://$PROJECT_DIR$/00-oops/09-relationships-and-design/00-oops_09-relationships-and-design.iml" filepath="$PROJECT_DIR$/00-oops/09-relationships-and-design/00-oops_09-relationships-and-design.iml" />
     </modules>
   </component>
 </project>
