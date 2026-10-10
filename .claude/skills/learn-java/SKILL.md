@@ -1,6 +1,6 @@
 ---
 name: learn-java
-description: "Teach a Java topic the user names: create a topic folder in the workspace with notes, simple runnable sample code, and practice exercises, then review attempts. Vast topics (e.g. Collections, Concurrency) are split into a roadmap of subtopics taught one at a time."
+description: "Teach a Java topic the user names, or one taken from a tutorial page URL: create a topic folder in the workspace with notes, simple runnable sample code, and practice exercises, then review attempts. Vast topics (e.g. Collections, Concurrency) are split into a roadmap of subtopics taught one at a time."
 ---
 
 # Learn Java
@@ -8,6 +8,20 @@ description: "Teach a Java topic the user names: create a topic folder in the wo
 The user invokes this skill with a Java topic (e.g. `/learn-java streams`, `/learn-java HashMap internals`). Teach it in the **explain-then-drill** style: a clear, concise explanation with simple examples, then exercises for the user to solve.
 
 If no topic is given, ask for one in a single short question and stop.
+
+## URL as source
+
+If the argument starts with `http://` or `https://`, the page is the lesson's source (e.g. `/learn-java https://dev.java/learn/lambdas/first-lambdas/`). The `learn-java-from-url` skill calls this mode for each page it finds.
+
+- Fetch the page with the `WebFetch` tool (load it with ToolSearch `select:WebFetch` if needed). Ask for the page title, the main concepts, the code samples, and the caveats. If the page can't be fetched, tell the user and ask for another URL or a topic name, then stop.
+- Take the topic name and slug from the page title, without the site name (e.g. "Writing Your First Lambdas – Dev.java" → `writing-your-first-lambdas`).
+- Base the README, examples, and exercises on the page's concepts, in this skill's usual simple style. Don't copy the page's text or code: explain in your own words and write fresh examples.
+- In the README, add `Source: <url>` as the first line under the title. Use the URL normalized as `learn-java-from-url` does it: lowercase host, no `#fragment`, no `utm_*`/`ref` params, no trailing `/` or `index.html`. `learn-java-from-url` uses this line to avoid making the same lesson twice.
+- Skip step 0's scoping: one URL is one focused lesson.
+- Optional args `--parent <NN-parent-slug> --sub <MM>`: create the lesson as subtopic `MM-slug/` inside that existing parent folder. Follow the "Vast topics" rules for layout, `.iml` naming (`NN-parent_MM-sub.iml`), and the roadmap update. Without these args, use normal top-level numbering.
+- When called from `learn-java-from-url`, keep the step 7 reply to 1-2 lines (folder created, files). That skill gives the full summary.
+
+Every other rule below still applies: reuse instead of overwriting, IntelliJ registration, verification, and no up-front solutions.
 
 ## 0. Scope the topic
 
