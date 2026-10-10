@@ -30,7 +30,7 @@ import java.util.List;
  *   - Which kind of static final field is a compile-time constant?
  *
  * Run: press the green run button next to main in IntelliJ, or from the repo root:
- *   javac -d out $(find 00-oops -name "*.java") && java -cp out oops.exercises.Exercise2_PredictInitOrder
+ *   javac -d out $(find 00-oops/01-classes-objects -name "*.java") && java -cp out oops.exercises.Exercise2_PredictInitOrder
  */
 public class Exercise2_PredictInitOrder {
 

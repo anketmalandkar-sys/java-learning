@@ -1,64 +1,68 @@
-# OOP in Java: Learning Module
+# Object-Oriented Programming
 
-Start with **[OOPS.md](OOPS.md)** for the theory. Then run each demo in order. Every file has its own `main` and detailed comments.
+Source: https://dev.java/learn/language/oop
 
-| # | File | What it teaches |
-|---|---|---|
-| 1 | [basics/ClassesAndObjects.java](basics/ClassesAndObjects.java) | Class vs object, constructors and `this(...)` chaining, overloading, `static` vs instance, references, `==` vs `equals` |
-| 2 | [encapsulation/BankAccount.java](encapsulation/BankAccount.java) | Private state, validated behavior, invariants, defensive getters |
-| 3 | [encapsulation/EncapsulationDemo.java](encapsulation/EncapsulationDemo.java) | Access-modifier table, immutable `record` value object |
-| 4 | [inheritance/InheritanceDemo.java](inheritance/InheritanceDemo.java) | `extends`, `super`, constructor order, multilevel and hierarchical inheritance, `protected`, `final` |
-| 5 | [polymorphism/PolymorphismDemo.java](polymorphism/PolymorphismDemo.java) | Overloading vs overriding, dynamic dispatch, up/down-casting, `instanceof` patterns, static-method hiding |
-| 6 | [abstraction/AbstractionDemo.java](abstraction/AbstractionDemo.java) | Abstract class with the template method pattern, interfaces, default-method diamond, sealed types |
-| 7 | [relationships/AssociationDemo.java](relationships/AssociationDemo.java) | Uni/bi-directional, one-to-many, many-to-many, dependency |
-| 8 | [relationships/AggregationDemo.java](relationships/AggregationDemo.java) | Weak whole/part: parts are passed in, shared, and outlive the whole |
-| 9 | [relationships/CompositionDemo.java](relationships/CompositionDemo.java) | Strong whole/part: parts are created inside and die with the whole |
-| 10 | [relationships/CompositionOverInheritance.java](relationships/CompositionOverInheritance.java) | Why `Stack extends ArrayList` is bad, and delegation as the fix |
+## 1. Big picture
 
-### Added from dev.java "Object Oriented Programming"
+Object-oriented programming organizes a program around **objects**: units that bundle data with the code that works on it. Java's design rests on four pillars:
 
-These fill the gaps the demos above didn't cover. New topics (nested classes, enums, records, `Object`'s methods, packages) are full lessons in [10-object-oriented-programming](../10-object-oriented-programming/README.md).
-
-| # | File | What it teaches | Exercise |
-|---|---|---|---|
-| 11 | [basics/ParametersAndObjects.java](basics/ParametersAndObjects.java) | Varargs, pass-by-value for primitives vs references, parameter shadowing, private constructors + static factories, when objects become unreachable | [Exercise1_ParametersAndObjects](exercises/Exercise1_ParametersAndObjects.java) |
-| 12 | [basics/InitializationOrder.java](basics/InitializationOrder.java) | Static and instance initializer blocks, full parent/child initialization order, compile-time constant inlining, static calls through an instance | [Exercise2_PredictInitOrder](exercises/Exercise2_PredictInitOrder.java) |
-| 13 | [inheritance/OverridingRules.java](inheritance/OverridingRules.java) | Widening access, instance/static mismatch, overloading in a subclass, field hiding, overridable calls in constructors, default-method resolution, static interface methods | [Exercise3_OverridingTraps](exercises/Exercise3_OverridingTraps.java) |
-| 14 | [abstraction/InterfaceAndAbstractRules.java](abstraction/InterfaceAndAbstractRules.java) | Private/static/default interface methods, constants, interfaces extending several, evolving a published interface, interface-typed parameters, abstract classes implementing an interface partially | [Exercise4_EvolveTheInterface](exercises/Exercise4_EvolveTheInterface.java) |
-
-Sources for these additions:
-
-Source: https://dev.java/learn/language/oop/classes-objects/defining-constructors
-Source: https://dev.java/learn/language/oop/classes-objects/calling-methods-constructors
-Source: https://dev.java/learn/language/oop/classes-objects/creating-objects
-Source: https://dev.java/learn/language/oop/classes-objects/more-on-classes
-Source: https://dev.java/learn/language/oop/inheritance/what-is-inheritance
-Source: https://dev.java/learn/language/oop/inheritance/overriding
-Source: https://dev.java/learn/language/oop/inheritance/polymorphism
-Source: https://dev.java/learn/language/oop/inheritance/abstract-classes
-Source: https://dev.java/learn/language/oop/interfaces/defining-interfaces
-Source: https://dev.java/learn/language/oop/interfaces/examples
-
-The exercises print PASS/FAIL. Run them like the demos, e.g. `java -cp out oops.exercises.Exercise1_ParametersAndObjects`.
-
-## How to run
-
-Requires **JDK 21+** (uses records, sealed types, and pattern-matching `switch`).
-
-**IntelliJ:** open any file and click the green ▶ next to `main`. The repo root is the source root, so the packages are `oops.*`.
-
-**Command line**, run from the repo root (`java-learning/`):
-
-```powershell
-# compile everything into ./out
-javac -d out (Get-ChildItem -Recurse 00-oops -Filter *.java).FullName
-
-# run a demo
-java -cp out oops.relationships.CompositionDemo
+```
+                         OOP
+        ┌────────────┬────────┴────┬──────────────┐
+  Encapsulation  Inheritance  Polymorphism   Abstraction
+  (hide data)    (reuse, IS-A) (many forms)  (hide complexity)
+     → 01           → 05          → 05           → 07
 ```
 
-```bash
-# Git Bash / Linux / macOS
-javac -d out $(find 00-oops -name '*.java')
-java -cp out oops.polymorphism.PolymorphismDemo
+The parts below follow the dev.java "Object Oriented Programming" tutorial in its order (Classes and Objects → Records → Inheritance → Interfaces → Packages), plus a final part on relationships and design that dev.java doesn't cover.
+
 ```
+Object Oriented Programming
+├── Classes and Objects ─┬─ classes, methods, constructors, objects   → 01
+│                        ├─ nested, local, anonymous classes         → 02
+│                        └─ enums                                    → 03
+├── Records                                                          → 04
+├── Inheritance ─────────┬─ inheritance, overriding, polymorphism    → 05
+│                        ├─ Object as a superclass                   → 06
+│                        └─ abstract classes                         → 07 (with interfaces)
+├── Interfaces                                                       → 07  (+ 02-comparator for Comparator)
+├── Packages                                                         → 08
+└── (extra) relationships, composition, SOLID                        → 09
+```
+
+## 2. Roadmap
+
+| # | Part | What you'll learn | dev.java pages | Status |
+|---|------|-------------------|----------------|--------|
+| 01 | [Classes and objects](01-classes-objects/) | Class vs object, constructors, `this`, `static`, encapsulation and access modifiers, varargs, pass-by-value, initialization order | [overview](https://dev.java/learn/language/oop/classes), [creating-classes](https://dev.java/learn/language/oop/classes-objects/creating-classes), [defining-methods](https://dev.java/learn/language/oop/classes-objects/defining-methods), [defining-constructors](https://dev.java/learn/language/oop/classes-objects/defining-constructors), [calling-methods-constructors](https://dev.java/learn/language/oop/classes-objects/calling-methods-constructors), [creating-objects](https://dev.java/learn/language/oop/classes-objects/creating-objects), [more-on-classes](https://dev.java/learn/language/oop/classes-objects/more-on-classes) | 📖 |
+| 02 | [Nested classes](02-nested-classes/) | Static nested vs inner classes, local and anonymous classes, shadowing, and when to use each vs a lambda | [nested-classes](https://dev.java/learn/language/oop/classes-objects/nested-classes), [design-best-practices](https://dev.java/learn/language/oop/classes-objects/design-best-practices) | 📖 |
+| 03 | [Enums](03-enums/) | Constants, fields and constructors, `values`/`valueOf`/`ordinal`, switch, constant-specific methods, `EnumMap`/`EnumSet` | [enums](https://dev.java/learn/language/oop/classes-objects/enums) | 📖 |
+| 04 | [Records](04-records/) | Components and accessors, compact vs canonical constructors, restrictions, defensive copies, local records | [records](https://dev.java/learn/language/oop/records) | 📖 |
+| 05 | [Inheritance and polymorphism](05-inheritance/) | `extends`, `super`, constructor order, overriding vs overloading, dynamic dispatch, casting, hiding, overriding rules | [what-is-inheritance](https://dev.java/learn/language/oop/inheritance/what-is-inheritance), [overriding](https://dev.java/learn/language/oop/inheritance/overriding), [polymorphism](https://dev.java/learn/language/oop/inheritance/polymorphism) | 📖 |
+| 06 | [Object as a superclass](06-object-superclass/) | `toString`, the `equals`/`hashCode` contract, `getClass`, `clone` and its traps, why not `finalize` | [objects](https://dev.java/learn/language/oop/inheritance/objects) | 📖 |
+| 07 | [Interfaces and abstract classes](07-interfaces/) | Abstract class vs interface, default/static/private methods, the default diamond, sealed types, evolving an interface, interface as a type | [abstract-classes](https://dev.java/learn/language/oop/inheritance/abstract-classes), [defining-interfaces](https://dev.java/learn/language/oop/interfaces/defining-interfaces), [examples](https://dev.java/learn/language/oop/interfaces/examples), [interfaces-as-a-type](https://dev.java/learn/language/oop/interfaces/interfaces-as-a-type) | 📖 |
+| 08 | [Packages](08-packages/) | Package statements and naming, imports, wildcards, ambiguity, static imports, folders and the classpath | [packages](https://dev.java/learn/language/oop/packages) | 📖 |
+| 09 | [Relationships and design](09-relationships-and-design/) | Association, aggregation, composition, composition over inheritance, coupling, cohesion, SOLID | (not in dev.java) | 📖 |
+
+Index pages on dev.java (lists of lessons, nothing to teach): [classes-objects](https://dev.java/learn/language/oop/classes-objects), [inheritance](https://dev.java/learn/language/oop/inheritance), [interfaces](https://dev.java/learn/language/oop/interfaces).
+
+Mark each part ✅ once its exercises have been reviewed.
+
+## 3. How the pieces relate
+
+- **New to OOP?** Start at **01**: classes, objects, and encapsulation.
+- **A helper type used by only one class?** A nested class (**02**): `static` unless it needs the outer object.
+- **A fixed set of values (days, statuses, plans)?** An enum (**03**).
+- **A plain immutable data carrier (a point, a DTO, a map key)?** A record (**04**). It gets `equals`/`hashCode`/`toString` for free; a normal class needs them written by hand (**06**).
+- **Reusing code from a parent class, or writing code that works for many subtypes?** Inheritance and polymorphism (**05**). Unrelated classes sharing a capability? An interface (**07**).
+- **Growing past a handful of files?** Packages (**08**) group them and control what's visible.
+- **Should this be inheritance or a field?** Relationships and composition (**09**).
+
+## 4. Two kinds of parts
+
+- **01, 05, 07, 09** are demo modules in packages (`oops.basics`, `oops.inheritance`, `oops.abstraction`, `oops.relationships`, and `oops.exercises`). In IntelliJ press ▶ next to any `main`. From the repo root, compile one part at a time, e.g.:
+  ```bash
+  javac -d out $(find 00-oops/05-inheritance -name '*.java')
+  java -cp out oops.polymorphism.PolymorphismDemo
+  ```
+- **02, 03, 04, 06, 08** are lessons like the rest of the repo: from the lesson folder, `java examples/Example1_Basics.java` or `java exercises/Exercise1_*.java`. **08** also has packaged examples; see its README.

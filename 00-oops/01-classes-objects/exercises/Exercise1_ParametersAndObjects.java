@@ -30,7 +30,7 @@ import java.util.Arrays;
  *   ALL PASS
  *
  * Run: press the green run button next to main in IntelliJ, or from the repo root:
- *   javac -d out $(find 00-oops -name "*.java") && java -cp out oops.exercises.Exercise1_ParametersAndObjects
+ *   javac -d out $(find 00-oops/01-classes-objects -name "*.java") && java -cp out oops.exercises.Exercise1_ParametersAndObjects
  */
 public class Exercise1_ParametersAndObjects {
 

@@ -1,7 +1,7 @@
 package oops.exercises;
 
 /**
- * Exercise 3 (Hard): three inheritance traps.
+ * Exercise 1 (Hard): three inheritance traps.
  * Goes with inheritance/OverridingRules.java.
  *
  * TASK
@@ -26,9 +26,9 @@ package oops.exercises;
  *   ALL PASS
  *
  * Run: press the green run button next to main in IntelliJ, or from the repo root:
- *   javac -d out $(find 00-oops -name "*.java") && java -cp out oops.exercises.Exercise3_OverridingTraps
+ *   javac -d out $(find 00-oops/05-inheritance -name "*.java") && java -cp out oops.exercises.Exercise1_OverridingTraps
  */
-public class Exercise3_OverridingTraps {
+public class Exercise1_OverridingTraps {
 
     // ---- 1. Overridable call in a constructor ----
     static class Report {

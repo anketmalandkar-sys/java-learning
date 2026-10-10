@@ -2,7 +2,7 @@
 
 Source: https://dev.java/learn/language/oop/inheritance/objects
 
-← Back to [Object Oriented Programming](../README.md) · `==` vs `equals` and the "override both" rule first appear in [00-oops/basics/ClassesAndObjects.java](../../00-oops/basics/ClassesAndObjects.java) (`Point`).
+← Back to [Object Oriented Programming](../README.md) · `==` vs `equals` and the "override both" rule first appear in [01-classes-objects/basics/ClassesAndObjects.java](../01-classes-objects/basics/ClassesAndObjects.java) (`Point`).
 
 ## 1. What it is
 

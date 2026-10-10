@@ -2,7 +2,7 @@
 
 Source: https://dev.java/learn/language/oop/records
 
-← Back to [Object Oriented Programming](../README.md) · A first look at records is in [00-oops/encapsulation/EncapsulationDemo.java](../../00-oops/encapsulation/EncapsulationDemo.java) (`Money`).
+← Back to [Object Oriented Programming](../README.md) · A first look at records is in [01-classes-objects/encapsulation/EncapsulationDemo.java](../01-classes-objects/encapsulation/EncapsulationDemo.java) (`Money`).
 
 ## 1. What it is
 

@@ -5,7 +5,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 /**
- * Exercise 4 (Medium): evolve a published interface without breaking anyone.
+ * Exercise 1 (Medium): evolve a published interface without breaking anyone.
  * Goes with abstraction/InterfaceAndAbstractRules.java.
  *
  * TASK
@@ -42,9 +42,9 @@ import java.util.List;
  *   ALL PASS
  *
  * Run: press the green run button next to main in IntelliJ, or from the repo root:
- *   javac -d out $(find 00-oops -name "*.java") && java -cp out oops.exercises.Exercise4_EvolveTheInterface
+ *   javac -d out $(find 00-oops/07-interfaces -name "*.java") && java -cp out oops.exercises.Exercise1_EvolveTheInterface
  */
-public class Exercise4_EvolveTheInterface {
+public class Exercise1_EvolveTheInterface {
 
     interface Exporter {
         String export(List<String> rows);
