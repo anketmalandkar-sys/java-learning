@@ -40,20 +40,26 @@ public class Exercise3_SlowReportBug {
         private String lastReport;
 
         StringBuilder build(List<Sale> sales) {
-            StringBuilder report = new StringBuilder('[');
+            // Bug 2: new StringBuilder('[') has no char constructor, so '[' widened to int 91 and
+            // picked StringBuilder(int capacity): an EMPTY builder. Use the String constructor.
+            StringBuilder report = new StringBuilder("[");
             report.append("SALES REPORT]\n");
 
-            String body = "";
+            // Bug 1: body += ... copied the whole growing String on every row (quadratic time).
+            // Append each piece straight into the one builder instead.
             for (Sale sale : sales) {
-                body += sale.region() + "," + sale.product() + "," + sale.amount() + "\n";
+                report.append(sale.region()).append(',')
+                        .append(sale.product()).append(',')
+                        .append(sale.amount()).append('\n');
             }
-            report.append(body);
             return report;
         }
 
         // True if this report is identical to the previous one. Remembers it for next time.
         boolean isUnchanged(StringBuilder report) {
-            boolean same = lastReport != null && lastReport.equals(report);
+            // Bug 3: String.equals(StringBuilder) is always false (different classes), and
+            // StringBuilder doesn't override equals either. Compare the contents.
+            boolean same = lastReport != null && lastReport.contentEquals(report);
             lastReport = report.toString();
             return same;
         }

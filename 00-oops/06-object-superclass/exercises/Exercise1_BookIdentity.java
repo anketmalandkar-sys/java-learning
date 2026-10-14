@@ -44,6 +44,27 @@ public class Exercise1_BookIdentity {
         }
 
         // TODO: toString, equals, hashCode
+
+        @Override
+        public int hashCode() {
+            return isbn.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof Book other) {
+                return isbn.equals(other.isbn);
+            }
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return "Book[" +
+                    "isbn=" + isbn +
+                    ", copy=" + copyNumber +
+                    "]";
+        }
     }
 
     public static void main(String[] args) {

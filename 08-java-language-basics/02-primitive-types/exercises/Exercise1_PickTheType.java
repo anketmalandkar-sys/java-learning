@@ -31,27 +31,27 @@
 public class Exercise1_PickTheType {
 
     static long worldPopulation() {
-        return 0; // TODO
+        return 8_100_000_000L;
     }
 
     static int brandOrange() {
-        return 0; // TODO
+        return 0xFF8800;
     }
 
     static int permissions() {
-        return 0; // TODO
+        return 0b1010;
     }
 
-    static double taxRate() {   // TODO: float
-        return 0; // TODO
+    static float taxRate() {
+        return 0.18f;
     }
 
-    static int topGrade() {     // TODO: char
-        return 0; // TODO
+    static char topGrade() {
+        return 'A';
     }
 
-    static Object hasDiscount() {   // TODO: boolean
-        return null; // TODO
+    static boolean hasDiscount() {
+        return true;
     }
 
     public static void main(String[] args) {

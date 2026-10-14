@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Exercise 2 (Medium): a shop receipt.
@@ -48,13 +49,32 @@ public class Exercise2_ReceiptPrinter {
     record Item(String name, int quantity, double price) {}
 
     static String receipt(String shop, List<Item> items) {
-        // TODO
-        return null;
+        String rule = "-".repeat(30);
+        StringBuilder sb = new StringBuilder();
+        sb.append(" ".repeat((30 - shop.length()) / 2)).append(shop).append('\n');
+        sb.append(rule).append('\n');
+
+        double subtotal = 0;
+        for (Item item : items) {
+            sb.append(String.format("%-15s %2d x %8.2f", item.name(), item.quantity(), item.price())).append('\n');
+            subtotal += item.quantity() * item.price();
+        }
+        double gst = subtotal * 0.05;
+
+        sb.append(rule).append('\n');
+        sb.append(String.format("%-20s%10.2f", "Subtotal", subtotal)).append('\n');
+        sb.append(String.format("%-20s%10.2f", "GST 5%", gst)).append('\n');
+        sb.append(String.format("%-20s%10.2f", "TOTAL", subtotal + gst)).append('\n');
+        return sb.toString();
     }
 
     static String summary(List<Item> items) {
-        // TODO
-        return null;
+        if (items.isEmpty()) {
+            return "0 items: none";
+        }
+        return items.stream()
+                .map(item -> item.name() + " x" + item.quantity())
+                .collect(Collectors.joining(", ", items.size() + " items: ", ""));
     }
 
     public static void main(String[] args) {

@@ -1,4 +1,5 @@
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Exercise 3 (Hard): the coupon service that only works in tests.
@@ -43,11 +44,10 @@ public class Exercise3_CouponBug {
             if (isExpired(status)) {
                 return 0;
             }
-            String code = rawCode;
-            code.trim();
-            code.toUpperCase();
+
+            String code = rawCode.trim().toUpperCase();
             for (String known : DISCOUNTS.keySet()) {
-                if (known == code) {
+                if (known.equals(code)) {
                     return DISCOUNTS.get(known);
                 }
             }
@@ -55,7 +55,7 @@ public class Exercise3_CouponBug {
         }
 
         static boolean isExpired(String status) {
-            return status.equals("EXPIRED");
+            return Objects.nonNull(status) && status.equals("EXPIRED");
         }
     }
 

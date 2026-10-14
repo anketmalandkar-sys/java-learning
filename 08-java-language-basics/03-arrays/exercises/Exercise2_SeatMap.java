@@ -29,19 +29,49 @@
 public class Exercise2_SeatMap {
 
     static boolean[][] createHall(int[] rowLengths) {
-        return new boolean[0][]; // TODO
+        boolean[][] hall = new boolean[rowLengths.length][];
+        for (int r = 0; r < rowLengths.length; r++) {
+            hall[r] = new boolean[rowLengths[r]];
+        }
+        return hall;
     }
 
     static boolean book(boolean[][] hall, int row, int seat) {
-        return false; // TODO
+        if (row < 0 || row >= hall.length || seat < 0 || seat >= hall[row].length || hall[row][seat]) {
+            return false;
+        }
+        hall[row][seat] = true;
+        return true;
     }
 
     static int freeSeats(boolean[][] hall) {
-        return 0; // TODO
+        int free = 0;
+        for (boolean[] row : hall) {
+            for (boolean taken : row) {
+                if (!taken) {
+                    free++;
+                }
+            }
+        }
+        return free;
     }
 
     static int fullestRow(boolean[][] hall) {
-        return -1; // TODO
+        int best = 0;
+        int bestTaken = -1;
+        for (int r = 0; r < hall.length; r++) {
+            int taken = 0;
+            for (boolean seat : hall[r]) {
+                if (seat) {
+                    taken++;
+                }
+            }
+            if (taken > bestTaken) {   // strictly greater: the first row wins a tie
+                best = r;
+                bestTaken = taken;
+            }
+        }
+        return best;
     }
 
     public static void main(String[] args) {

@@ -42,25 +42,33 @@ public class Exercise3_VendingCommands {
     static int stock = 2;
 
     static String handle(String command) {
-        String reply = "";
-        switch (command.toLowerCase()) {
+        // Bug: switching on null.toLowerCase() crashed. Map null to "" so it hits default.
+        String key = command == null ? "" : command.toLowerCase();
+        String reply;
+        switch (key) {
             case "coin":
                 credit += 10;
                 reply = "Credit: " + credit;
+                break;   // Bug: the missing break fell through into "refund"
             case "refund":
                 reply = "Refunded " + credit;
                 credit = 0;
                 break;
             case "buy":
-                if (credit >= PRICE) {
+                // Bug: the stock check came after the credit check, so an empty machine "sold" an item.
+                if (stock == 0) {
+                    reply = "Sold out";
+                } else if (credit >= PRICE) {
                     credit -= PRICE;
                     stock -= 1;
                     reply = "Enjoy!";
-                } else if (stock == 0) {
-                    reply = "Sold out";
                 } else {
                     reply = "Need " + (PRICE - credit) + " more";
                 }
+                break;
+            default:
+                // Bug: there was no default, so unknown commands kept the empty reply.
+                reply = "Unknown command";
                 break;
         }
         return reply;

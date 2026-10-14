@@ -56,7 +56,25 @@ public class Exercise2_MiniTestRunner {
         List<String> passed = new ArrayList<>();
         List<String> failed = new ArrayList<>();
         List<String> skipped = new ArrayList<>();
-        // TODO
+
+        Object instance = testClass.getDeclaredConstructor().newInstance();
+        List<Method> checks = Arrays.stream(testClass.getDeclaredMethods())
+                .filter(m -> m.isAnnotationPresent(Check.class))
+                .sorted(Comparator.comparing(Method::getName))
+                .toList();
+
+        for (Method m : checks) {
+            if (m.isAnnotationPresent(Skip.class)) {
+                skipped.add(m.getName());
+                continue;
+            }
+            try {
+                m.invoke(instance);
+                passed.add(m.getName());
+            } catch (InvocationTargetException e) {
+                failed.add(m.getName() + ": " + e.getCause().getMessage());
+            }
+        }
         return new Report(passed, failed, skipped);
     }
 

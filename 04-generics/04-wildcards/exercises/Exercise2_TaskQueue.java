@@ -76,30 +76,44 @@ public class Exercise2_TaskQueue {
             return List.copyOf(items);
         }
 
-        void addAll(Collection<?> source) {
-            // TODO: fix the wildcard, then implement
+        // Producer: we read Ts out of source.
+        void addAll(Collection<? extends T> source) {
+            items.addAll(source);
         }
 
-        int drainTo(Collection<?> target) {
-            // TODO: fix the wildcard, then implement
-            return -1;
+        // Consumer: we hand Ts to target.
+        int drainTo(Collection<? super T> target) {
+            int moved = items.size();
+            target.addAll(items);
+            items.clear();
+            return moved;
         }
 
-        int removeIf(Predicate<?> rule) {
-            // TODO: fix the wildcard, then implement
-            return -1;
+        // Consumer: the rule is handed Ts.
+        int removeIf(Predicate<? super T> rule) {
+            int before = items.size();
+            items.removeIf(rule);
+            return before - items.size();
         }
 
-        void forEach(Consumer<?> action) {
-            // TODO: fix the wildcard, then implement
+        // Consumer: the action is handed Ts.
+        void forEach(Consumer<? super T> action) {
+            for (T item : items) {
+                action.accept(item);
+            }
         }
     }
 
     static void rotate(List<?> list) {
-        // TODO: call your rotateHelper
+        rotateHelper(list);
     }
 
-    // TODO: write private static <T> void rotateHelper(List<T> list)
+    // Captures the ? as a named T, so we can put back an element we took out.
+    private static <T> void rotateHelper(List<T> list) {
+        if (!list.isEmpty()) {
+            list.add(list.remove(0));
+        }
+    }
 
     public static void main(String[] args) {
         TaskQueue<Task> queue = new TaskQueue<>();

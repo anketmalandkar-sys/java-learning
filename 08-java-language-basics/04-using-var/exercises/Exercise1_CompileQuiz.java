@@ -28,17 +28,16 @@
  */
 public class Exercise1_CompileQuiz {
 
-    // TODO: set each answer
-    static boolean q1 = false;
-    static boolean q2 = false;
-    static boolean q3 = false;
-    static boolean q4 = false;
-    static boolean q5 = false;
-    static boolean q6 = false;
-    static boolean q7 = false;
-    static boolean q8 = false;
-    static boolean q9 = false;
-    static boolean q10 = false;
+    static boolean q1 = true;    // initializer gives the type: String
+    static boolean q2 = false;   // no initializer: nothing to infer from
+    static boolean q3 = false;   // var is only for LOCAL variables, not fields
+    static boolean q4 = false;   // null has no usable type
+    static boolean q5 = true;    // a for-loop variable is a local
+    static boolean q6 = false;   // not allowed for method parameters
+    static boolean q7 = false;   // an array initializer needs an explicit array type
+    static boolean q8 = true;    // new int[] {...} states the type: int[]
+    static boolean q9 = false;   // var can't declare several variables at once
+    static boolean q10 = false;  // x is an int; 7.5 is a double and needs a cast
 
     public static void main(String[] args) {
         boolean[] answers = {q1, q2, q3, q4, q5, q6, q7, q8, q9, q10};

@@ -40,23 +40,44 @@
 public class Exercise4_PasswordRules {
 
     static String checkPassword(String pw) {
-        return "TODO"; // TODO
+        boolean upper = false, lower = false, digit = false, symbol = false, space = false;
+        for (char c : pw.toCharArray()) {
+            if (Character.isUpperCase(c)) upper = true;
+            if (Character.isLowerCase(c)) lower = true;
+            if (Character.isDigit(c)) digit = true;
+            if (Character.isWhitespace(c)) space = true;
+            if (!Character.isLetterOrDigit(c) && !Character.isWhitespace(c)) symbol = true;
+        }
+        java.util.List<String> failures = new java.util.ArrayList<>();
+        if (pw.length() < 8) failures.add("too short");
+        if (!upper) failures.add("no uppercase");
+        if (!lower) failures.add("no lowercase");
+        if (!digit) failures.add("no digit");
+        if (!symbol) failures.add("no symbol");
+        if (space) failures.add("has space");
+        return String.join(", ", failures);
     }
 
     static int digitSum(String text) {
-        return 0; // TODO
+        int sum = 0;
+        for (char c : text.toCharArray()) {
+            if (Character.isDigit(c)) {
+                sum += Character.getNumericValue(c);
+            }
+        }
+        return sum;
     }
 
     static String windowsPath() {
-        return ""; // TODO
+        return "C:\\Users\\asha\\notes.txt";
     }
 
     static String quoted() {
-        return ""; // TODO
+        return "She said \"it's fine\"";
     }
 
     static String twoColumns() {
-        return ""; // TODO
+        return "Name\tAsha\nAge\t30";
     }
 
     public static void main(String[] args) {

@@ -45,12 +45,12 @@ public class Exercise3_TokenReader {
         }
     }
 
-    // TODO: fix the scope bug
+    // Bug: longWords was declared inside the loop body, so it restarted at 0 on every word.
     static int countLongWords(TokenReader reader, int minLength) {
         String token;
         int count = 0;
+        int longWords = 0;
         while ((token = reader.next()) != null) {
-            int longWords = 0;
             if (token.length() >= minLength) {
                 longWords++;
             }
@@ -60,11 +60,30 @@ public class Exercise3_TokenReader {
     }
 
     static int[] stats(TokenReader reader) {
-        return new int[] {0, 0, 0}; // TODO
+        int words = 0;
+        int letters = 0;
+        int longest = 0;
+        String token;
+        while ((token = reader.next()) != null) {
+            words++;
+            letters += token.length();
+            if (token.length() > longest) {
+                longest = token.length();
+            }
+        }
+        return new int[] {words, letters, longest};
     }
 
     static String firstRepeated(TokenReader reader) {
-        return "TODO"; // TODO
+        String previous = null;   // outside the loop, so it survives from one pass to the next
+        String token;
+        while ((token = reader.next()) != null) {
+            if (token.equalsIgnoreCase(previous)) {
+                return token;
+            }
+            previous = token;
+        }
+        return null;
     }
 
     public static void main(String[] args) {

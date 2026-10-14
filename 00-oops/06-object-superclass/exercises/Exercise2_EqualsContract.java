@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -42,12 +43,12 @@ public class Exercise2_EqualsContract {
 
         @Override
         public boolean equals(Object o) {
-            return o instanceof Coupon c && code.equalsIgnoreCase(c.code);
+            return o instanceof Coupon c && code.toLowerCase(Locale.ROOT).equalsIgnoreCase(c.code);
         }
 
         @Override
         public int hashCode() {
-            return code.hashCode();
+            return code.toLowerCase(Locale.ROOT).hashCode();
         }
     }
 
@@ -61,10 +62,10 @@ public class Exercise2_EqualsContract {
 
         @Override
         public boolean equals(Object o) {
-            if (o.getClass() != Temperature.class) {
-                return false;
+            if (o instanceof Temperature) {
+                return Double.compare(celsius, ((Temperature) o).celsius) == 0;
             }
-            return Double.compare(celsius, ((Temperature) o).celsius) == 0;
+            return false;
         }
 
         @Override
@@ -85,9 +86,7 @@ public class Exercise2_EqualsContract {
 
         @Override
         public boolean equals(Object o) {
-            if (o instanceof String s) {
-                return s.equals("" + row + number);   // "convenient", but one-sided
-            }
+            // Only another Seat can be equal: String.equals will never say "B12" equals a Seat.
             return o instanceof Seat other && row == other.row && number == other.number;
         }
 
@@ -105,8 +104,9 @@ public class Exercise2_EqualsContract {
             this.name = name;
         }
 
-        public boolean equals(Tag other) {
-            return other != null && name.equals(other.name);
+        @Override   // the parameter must be Object, or this is an overload HashSet never calls
+        public boolean equals(Object o) {
+            return o instanceof Tag other && name.equals(other.name);
         }
 
         @Override

@@ -40,7 +40,9 @@ public class Exercise3_ChainAndTrace {
         ConfigException(String message) {
             super(message);
         }
-        // TODO: a constructor that also takes the cause
+        ConfigException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 
     static int parsePort(String value) {
@@ -52,16 +54,28 @@ public class Exercise3_ChainAndTrace {
         try {
             return parsePort(value);
         } catch (NumberFormatException e) {
-            throw new ConfigException("bad port in config: " + text);   // TODO: keep the cause
+            throw new ConfigException("bad port in config: " + text, e);   // e becomes getCause()
         }
     }
 
     static Throwable rootCause(Throwable t) {
-        return t; // TODO
+        Throwable current = t;
+        // The second check guards against a cause chain that loops back on itself
+        while (current.getCause() != null && current.getCause() != current) {
+            current = current.getCause();
+        }
+        return current;
     }
 
     static String origin(Throwable t) {
-        return ""; // TODO
+        for (StackTraceElement frame : rootCause(t).getStackTrace()) {
+            String className = frame.getClassName();
+            if (className.startsWith("Exercise3_ChainAndTrace")) {
+                String simpleName = className.substring(className.lastIndexOf('.') + 1);
+                return simpleName + "." + frame.getMethodName();
+            }
+        }
+        return "";   // no frame from our own code
     }
 
     static boolean WARNINGS_ON = false;
@@ -72,15 +86,15 @@ public class Exercise3_ChainAndTrace {
         return "env=prod, host=app-7";
     }
 
-    // TODO: take a Supplier<String> instead
-    static void warn(String message) {
+    // The message is only built (get() called) when warnings are on
+    static void warn(Supplier<String> message) {
         if (WARNINGS_ON) {
-            System.out.println("WARN " + message);
+            System.out.println("WARN " + message.get());
         }
     }
 
     static void startServer() {
-        warn("starting with " + describeEnvironment());   // TODO: pass a lambda
+        warn(() -> "starting with " + describeEnvironment());
     }
 
     public static void main(String[] args) {

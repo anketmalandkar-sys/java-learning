@@ -49,35 +49,35 @@ public class Exercise4_MethodReferences {
     static final List<String> BANNED = List.of("spam", "scam");
 
     static IntBinaryOperator larger() {
-        return (a, b) -> Math.max(a, b);
+        return Math::max;                                 // static
     }
 
     static BiPredicate<String, String> startsWith() {
-        return (s, prefix) -> s.startsWith(prefix);
+        return String::startsWith;                        // unbound
     }
 
     static Predicate<String> isBanned() {
-        return word -> BANNED.contains(word);
+        return BANNED::contains;                          // bound
     }
 
     static Comparator<String> byLength() {
-        return Comparator.comparingInt(s -> s.length());
+        return Comparator.comparingInt(String::length);   // unbound
     }
 
     static BinaryOperator<String> concat() {
-        return (a, b) -> a.concat(b);
+        return String::concat;                            // unbound
     }
 
     static Supplier<List<String>> newList() {
-        return () -> new ArrayList<>();
+        return ArrayList::new;                            // constructor (no-arg)
     }
 
     static Function<Collection<String>, List<String>> copyList() {
-        return c -> new ArrayList<>(c);
+        return ArrayList::new;                            // constructor (copy)
     }
 
     static BiFunction<String, Integer, Ticket> makeTicket() {
-        return (event, seat) -> new Ticket(event, seat);
+        return Ticket::new;                               // constructor
     }
 
     public static void main(String[] args) throws Exception {

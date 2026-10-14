@@ -41,7 +41,12 @@ public class Exercise1_ToExpressions {
     }
 
     static String sizeNameNew(char code) {
-        return ""; // TODO
+        return switch (code) {
+            case 'S' -> "Small";
+            case 'M' -> "Medium";
+            case 'L' -> "Large";
+            default -> "Unknown";
+        };
     }
 
     static boolean vowelOld(char c) {
@@ -61,7 +66,10 @@ public class Exercise1_ToExpressions {
     }
 
     static boolean vowelNew(char c) {
-        return false; // TODO
+        return switch (c) {
+            case 'a', 'e', 'i', 'o', 'u' -> true;
+            default -> false;
+        };
     }
 
     static String httpStatusOld(int code) {
@@ -96,7 +104,15 @@ public class Exercise1_ToExpressions {
     }
 
     static String httpStatusNew(int code) {
-        return ""; // TODO
+        return switch (code) {
+            case 200, 201, 204 -> "Success";
+            case 301, 302 -> "Redirect";
+            case 400 -> "Bad request";
+            case 401, 403 -> "Not allowed";
+            case 404 -> "Not found";
+            case 500 -> "Server error";
+            default -> "Other";
+        };
     }
 
     public static void main(String[] args) {

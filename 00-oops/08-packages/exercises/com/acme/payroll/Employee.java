@@ -5,13 +5,24 @@ package com.acme.payroll;
  */
 public class Employee {
 
-    public String name;             // TODO
-    public long annualRupees;       // TODO: nobody outside payroll should read or change it directly
+    private final String name;
+    private long annualRupees;      // only payroll code can read or change it
 
     public Employee(String name, long annualRupees) {
         this.name = name;
         this.annualRupees = annualRupees;
     }
 
-    // TODO: add a public name() accessor
+    public String name() {
+        return name;
+    }
+
+    // Package-private: visible to PayrollService, not to com.acme.app.
+    long annualRupees() {
+        return annualRupees;
+    }
+
+    void setAnnualRupees(long annualRupees) {
+        this.annualRupees = annualRupees;
+    }
 }

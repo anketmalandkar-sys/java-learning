@@ -45,27 +45,41 @@ public class Exercise2_GenericArrayStack {
         private int size = 0;
 
         void push(T item) {
-            // TODO
+            if (size == elements.length) {
+                elements = java.util.Arrays.copyOf(elements, elements.length * 2);
+            }
+            elements[size++] = item;
         }
 
         T pop() {
-            // TODO
-            return null;
+            T top = peek();
+            elements[--size] = null;   // let the object be garbage-collected
+            return top;
         }
 
         T peek() {
-            // TODO
-            return null;
+            if (size == 0) {
+                throw new IllegalStateException("stack is empty");
+            }
+            return elementAt(size - 1);
         }
 
         int size() {
-            // TODO
-            return -1;
+            return size;
         }
 
         T[] toArray(Class<T> type) {
-            // TODO
-            return null;
+            // Safe: Array.newInstance(type, ...) really creates a T[].
+            @SuppressWarnings("unchecked")
+            T[] result = (T[]) java.lang.reflect.Array.newInstance(type, size);
+            System.arraycopy(elements, 0, result, 0, size);
+            return result;
+        }
+
+        // Safe: push() only ever stores Ts.
+        @SuppressWarnings("unchecked")
+        private T elementAt(int index) {
+            return (T) elements[index];
         }
 
         int capacity() {   // used by main to check that the array grew

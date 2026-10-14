@@ -43,23 +43,24 @@ public class Exercise2_FormatReport {
     }
 
     static String money(double amount) {
-        return ""; // TODO
+        return String.format(Locale.US, "%,.2f", amount);
     }
 
     static String percentChange(double oldValue, double newValue) {
-        return ""; // TODO
+        double percent = (newValue - oldValue) / oldValue * 100;
+        return String.format(Locale.US, "%+.1f%%", percent);
     }
 
     static String invoiceNumber(int n) {
-        return ""; // TODO
+        return String.format(Locale.US, "INV-%06d", n);
     }
 
     static String reportLine(String item, int qty, double price) {
-        return ""; // TODO
+        return String.format(Locale.US, "%-10s%4d%12s", item, qty, money(price));
     }
 
     static String compact(double amount) {
-        return ""; // TODO: new DecimalFormat("#,##0.##", usSymbols())
+        return new DecimalFormat("#,##0.##", usSymbols()).format(amount);
     }
 
     public static void main(String[] args) {

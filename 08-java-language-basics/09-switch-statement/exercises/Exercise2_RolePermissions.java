@@ -40,7 +40,25 @@ public class Exercise2_RolePermissions {
 
     static List<String> permissionsFor(String role) {
         List<String> permissions = new ArrayList<>();
-        // TODO
+        if (role == null) {
+            return permissions;   // switching on a null String throws NullPointerException
+        }
+        switch (role.strip().toLowerCase()) {
+            case "owner":
+                permissions.add("transfer");
+                // fall through
+            case "admin":
+                permissions.add("delete");
+                // fall through
+            case "editor":
+                permissions.add("edit");
+                // fall through
+            case "viewer":
+                permissions.add("view");
+                break;
+            default:
+                break;
+        }
         return permissions;
     }
 

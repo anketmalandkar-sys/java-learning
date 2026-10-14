@@ -3,6 +3,8 @@ package oops.exercises;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Locale;
+import java.util.StringJoiner;
 
 /**
  * Exercise 1 (Medium): evolve a published interface without breaking anyone.
@@ -47,9 +49,21 @@ import java.util.List;
 public class Exercise1_EvolveTheInterface {
 
     interface Exporter {
+        int MAX_ROWS = 10_000;   // interface fields are implicitly public static final
+
         String export(List<String> rows);
 
-        // TODO: MAX_ROWS, default fileName, default extension, private slug
+        default String fileName(String base) {
+            return slug(base) + "." + extension();
+        }
+
+        default String extension() {
+            return "txt";
+        }
+
+        private String slug(String text) {   // helper for the defaults, not part of the public API
+            return text.toLowerCase(Locale.ROOT).replace(' ', '-');
+        }
     }
 
     // Written by another team. DO NOT EDIT.
@@ -60,34 +74,60 @@ public class Exercise1_EvolveTheInterface {
         }
     }
 
-    // TODO: interface Compressing extends Exporter
+    interface Compressing extends Exporter {
+        int compressionLevel();
 
-    abstract static class AbstractJsonExporter {   // TODO: implements Exporter, export(), extension()
+        @Override
+        String extension();   // redeclared abstract: cancels the "txt" default for this branch
     }
 
-    // TODO: static class GzipJsonExporter extends AbstractJsonExporter implements Compressing
+    abstract static class AbstractJsonExporter implements Exporter {
+        @Override
+        public String export(List<String> rows) {
+            StringJoiner json = new StringJoiner(",", "[", "]");
+            for (String row : rows) {
+                json.add("\"" + row + "\"");
+            }
+            return json.toString();
+        }
+
+        @Override
+        public String extension() {
+            return "json";
+        }
+    }
+
+    static class GzipJsonExporter extends AbstractJsonExporter implements Compressing {
+        @Override
+        public int compressionLevel() {
+            return 9;
+        }
+
+        @Override
+        public String extension() {
+            return "json.gz";
+        }
+    }
 
     public static void main(String[] args) throws Exception {
         boolean allPass = true;
         Exporter legacy = new LegacyCsvExporter();
         allPass &= check("legacy works:", "a,b".equals(legacy.export(List.of("a", "b"))));
 
-        // uncomment:
-        // allPass &= check("defaults:", "sales-report.txt".equals(legacy.fileName("Sales Report"))
-        //         && Exporter.class.getMethod("fileName", String.class).isDefault()
-        //         && Exporter.class.getMethod("extension").isDefault());
-        // Method slug = Exporter.class.getDeclaredMethod("slug", String.class);
-        // allPass &= check("private slug:", Modifier.isPrivate(slug.getModifiers()));
-        // allPass &= check("constant:", Exporter.MAX_ROWS == 10_000);
-        // Exporter json = new AbstractJsonExporter() { };
-        // allPass &= check("json:", "[\"a\",\"b\"]".equals(json.export(List.of("a", "b")))
-        //         && "q1.json".equals(json.fileName("Q1")));
-        // GzipJsonExporter gz = new GzipJsonExporter();
-        // allPass &= check("gzip:", gz.compressionLevel() == 9 && "q1.json.gz".equals(gz.fileName("Q1"))
-        //         && gz instanceof Compressing && gz instanceof AbstractJsonExporter
-        //         && Modifier.isAbstract(Compressing.class.getDeclaredMethod("extension").getModifiers()));
+        allPass &= check("defaults:", "sales-report.txt".equals(legacy.fileName("Sales Report"))
+                && Exporter.class.getMethod("fileName", String.class).isDefault()
+                && Exporter.class.getMethod("extension").isDefault());
+        Method slug = Exporter.class.getDeclaredMethod("slug", String.class);
+        allPass &= check("private slug:", Modifier.isPrivate(slug.getModifiers()));
+        allPass &= check("constant:", Exporter.MAX_ROWS == 10_000);
+        Exporter json = new AbstractJsonExporter() { };
+        allPass &= check("json:", "[\"a\",\"b\"]".equals(json.export(List.of("a", "b")))
+                && "q1.json".equals(json.fileName("Q1")));
+        GzipJsonExporter gz = new GzipJsonExporter();
+        allPass &= check("gzip:", gz.compressionLevel() == 9 && "q1.json.gz".equals(gz.fileName("Q1"))
+                && gz instanceof Compressing && gz instanceof AbstractJsonExporter
+                && Modifier.isAbstract(Compressing.class.getDeclaredMethod("extension").getModifiers()));
 
-        allPass &= check("uncommented:", false);   // TODO: delete after uncommenting
         System.out.println(allPass ? "ALL PASS" : "SOME FAILED");
     }
 

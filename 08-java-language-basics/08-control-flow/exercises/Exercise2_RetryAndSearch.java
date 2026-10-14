@@ -53,15 +53,34 @@ public class Exercise2_RetryAndSearch {
     }
 
     static int attemptsUntilSuccess(FlakyService service, int maxAttempts) {
-        return 0; // TODO: use service.call() in a do-while loop
+        int attempts = 0;
+        boolean success;
+        do {
+            success = service.call();
+            attempts++;
+        } while (!success && attempts < maxAttempts);
+        return success ? attempts : -1;
     }
 
     static int indexOfFirstOverLimit(int[] amounts, int limit) {
-        return -2; // TODO
+        int result = -1;
+        for (int i = 0; i < amounts.length; i++) {
+            if (amounts[i] > limit) {
+                result = i;
+                break;
+            }
+        }
+        return result;
     }
 
     static int yearsToDouble(double ratePercent) {
-        return 0; // TODO
+        double amount = 1000;
+        int years = 0;
+        while (amount < 2000) {
+            amount += amount * ratePercent / 100;
+            years++;
+        }
+        return years;
     }
 
     public static void main(String[] args) {

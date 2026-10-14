@@ -35,30 +35,55 @@ import java.util.Optional;
 public class Exercise2_CoffeeSizes {
 
     enum CupSize {
-        SMALL, MEDIUM, LARGE;   // TODO: add constructor arguments, fields and a constructor
+        SMALL("S", 250, 120), MEDIUM("M", 350, 150), LARGE("L", 500, 190);   // TODO: add constructor arguments, fields and a constructor
+
+        private final String label;
+        private final int ml;
+        private final int priceRupees;
+
+        private CupSize(String label, int ml, int priceRupees) {
+            this.label = label;
+            this.ml = ml;
+            this.priceRupees = priceRupees;
+        }
 
         String label() {
-            return ""; // TODO
+            return this.label; // TODO
         }
 
         int ml() {
-            return 0; // TODO
+            return this.ml; // TODO
         }
 
         int priceRupees() {
-            return 0; // TODO
+            return this.priceRupees; // TODO
         }
 
         double pricePerMl() {
-            return 0; // TODO
+            return (double) this.priceRupees/ this.ml; // TODO
         }
 
         static Optional<CupSize> parse(String input) {
+            if (input == null || input.isEmpty()) {
+                return Optional.empty();
+            }
+            String trimmedInput = input.trim();
+            for (CupSize cupSize : CupSize.values()) {
+                if (cupSize.name().equalsIgnoreCase(trimmedInput) || cupSize.label().equalsIgnoreCase(trimmedInput)) {
+                    return Optional.of(cupSize);
+                }
+            }
             return Optional.empty(); // TODO
         }
 
         static CupSize bestValue() {
-            return null; // TODO
+            CupSize best = CupSize.SMALL;
+            for (CupSize cupSize : CupSize.values()) {
+                if (cupSize.pricePerMl() < best.pricePerMl()) {
+                    best = cupSize;
+                }
+            }
+            return best; // TODO
         }
     }
 

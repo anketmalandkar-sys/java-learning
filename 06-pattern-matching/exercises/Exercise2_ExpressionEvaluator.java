@@ -61,18 +61,46 @@ public class Exercise2_ExpressionEvaluator {
     record Neg(Expr inner) implements Expr {}
 
     static int eval(Expr expr) {
-        // TODO
-        return 0;
+        return switch (expr) {
+            case Num(int value) -> value;
+            case Add(Expr left, Expr right) -> eval(left) + eval(right);
+            case Mul(Expr left, Expr right) -> eval(left) * eval(right);
+            case Neg(Expr inner) -> -eval(inner);
+        };
     }
 
     static String show(Expr expr) {
-        // TODO
-        return "";
+        return switch (expr) {
+            case Num(int value) -> String.valueOf(value);
+            case Add(Expr left, Expr right) -> "(" + show(left) + " + " + show(right) + ")";
+            case Mul(Expr left, Expr right) -> "(" + show(left) + " * " + show(right) + ")";
+            case Neg(Expr inner) -> "-" + show(inner);
+        };
     }
 
     static Expr simplify(Expr expr) {
-        // TODO
-        return expr;
+        // Children first.
+        Expr simpler = switch (expr) {
+            case Num n -> n;
+            case Add(Expr l, Expr r) -> new Add(simplify(l), simplify(r));
+            case Mul(Expr l, Expr r) -> new Mul(simplify(l), simplify(r));
+            case Neg(Expr inner) -> new Neg(simplify(inner));
+        };
+        // Then the rules on the result.
+        return switch (simpler) {
+            case Add(Num(int n), Expr right) when n == 0 -> right;
+            case Add(Expr left, Num(int n)) when n == 0 -> left;
+            case Mul(Num(int n), Expr right) when n == 0 -> new Num(0);
+            case Mul(Expr left, Num(int n)) when n == 0 -> new Num(0);
+            case Mul(Num(int n), Expr right) when n == 1 -> right;
+            case Mul(Expr left, Num(int n)) when n == 1 -> left;
+            case Neg(Neg(Expr inner)) -> inner;
+            case Neg(Num(int n)) -> new Num(-n);
+            case Num n -> n;
+            case Add a -> a;
+            case Mul m -> m;
+            case Neg g -> g;
+        };
     }
 
     public static void main(String[] args) {

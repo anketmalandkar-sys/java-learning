@@ -33,11 +33,23 @@ public class Exercise1_SafeCalculator {
     static int CALLS = 0;
 
     static int priceOf(List<Integer> menu, String choice) {
-        return menu.get(Integer.parseInt(choice) - 1); // TODO: handle the two failures
+        try {
+            return menu.get(Integer.parseInt(choice) - 1);
+        } catch (NumberFormatException e) {
+            return -1;
+        } catch (IndexOutOfBoundsException e) {
+            return -2;
+        }
     }
 
     static int perPerson(String total, String people) {
-        return Integer.parseInt(total) / Integer.parseInt(people); // TODO: multi-catch + finally
+        try {
+            return Integer.parseInt(total) / Integer.parseInt(people);
+        } catch (NumberFormatException | ArithmeticException e) {
+            return -1;
+        } finally {
+            CALLS++;
+        }
     }
 
     public static void main(String[] args) {

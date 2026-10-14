@@ -46,18 +46,29 @@ public class Exercise1_ErasureWorkarounds {
     }
 
     static <T> List<T> createMany(Supplier<T> factory, int count) {
-        // TODO
-        return null;
+        List<T> result = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            result.add(factory.get());
+        }
+        return result;
     }
 
+    // Safe: Array.newInstance(type, ...) really creates a T[], so the cast can't lie.
+    @SuppressWarnings("unchecked")
     static <T> T[] filledArray(Class<T> type, int size, T value) {
-        // TODO
-        return null;
+        T[] array = (T[]) java.lang.reflect.Array.newInstance(type, size);
+        java.util.Arrays.fill(array, value);
+        return array;
     }
 
     static <T> List<T> onlyOfType(List<?> items, Class<T> type) {
-        // TODO
-        return null;
+        List<T> result = new ArrayList<>();
+        for (Object item : items) {
+            if (type.isInstance(item)) {
+                result.add(type.cast(item));
+            }
+        }
+        return result;
     }
 
     public static void main(String[] args) {

@@ -33,15 +33,44 @@ import java.util.function.Predicate;
 public class Exercise2_PickTheKind {
 
     static Predicate<String> asLambda(List<String> reserved) {
-        return name -> false; // TODO
+        return name -> name.length() >= 3 && name.length() <=15 && Character.isLetter(name.charAt(0)) && reserved.stream().noneMatch(r -> r.equalsIgnoreCase(name)); // TODO
     }
 
     static Predicate<String> asAnonymous(List<String> reserved) {
-        return name -> false; // TODO: replace with an anonymous class
+        return new Predicate<String>() {
+            private int rejected = 0;
+            @Override
+            public boolean test(String name) {
+                boolean result = name.length() >= 3 && name.length() <=15 && Character.isLetter(name.charAt(0)) && reserved.stream().noneMatch(r -> r.equalsIgnoreCase(name));
+                if (!result) {
+                    rejected++;
+                }
+                return result;
+            }
+
+            @Override
+            public String toString() {
+                return String.format("rejected=%d", rejected);
+            }
+        }; // TODO: replace with an anonymous class
     }
 
     static Predicate<String> asLocalClass(List<String> reserved, int minLength) {
-        return name -> false; // TODO: declare class LengthRule here and return an instance
+        class LengthRule implements Predicate<String> {
+            private final int min;
+
+            LengthRule(int min) {
+                this.min = min;
+            }
+
+            @Override
+            public boolean test(String name) {
+                return name.length() >= min && name.length() <= 15
+                        && Character.isLetter(name.charAt(0))
+                        && reserved.stream().noneMatch(r -> r.equalsIgnoreCase(name));
+            }
+        }
+        return new LengthRule(minLength); // TODO: declare class LengthRule here and return an instance
     }
 
     public static void main(String[] args) {

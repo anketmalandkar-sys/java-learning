@@ -25,15 +25,37 @@
 public class Exercise1_GradesAndLoops {
 
     static String grade(int score) {
-        return ""; // TODO
+        if (score < 0 || score > 100) {
+            return "INVALID";
+        } else if (score >= 90) {
+            return "A";
+        } else if (score >= 75) {
+            return "B";
+        } else if (score >= 50) {
+            return "C";
+        } else {
+            return "F";
+        }
     }
 
     static int sumSkippingMultiplesOf3(int n) {
-        return 0; // TODO
+        int sum = 0;
+        for (int i = 1; i <= n; i++) {
+            if (i % 3 == 0) {
+                continue;
+            }
+            sum += i;
+        }
+        return sum;
     }
 
     static int halvingSteps(int n) {
-        return -1; // TODO
+        int steps = 0;
+        while (n > 0) {
+            n /= 2;
+            steps++;
+        }
+        return steps;
     }
 
     public static void main(String[] args) {

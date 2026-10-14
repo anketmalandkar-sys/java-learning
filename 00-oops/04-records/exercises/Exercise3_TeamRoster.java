@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Exercise 3 (Hard): a leaky record and a local record.
@@ -33,7 +34,12 @@ public class Exercise3_TeamRoster {
 
     record Team(String name, List<String> members) {
         Team {
-            // TODO
+            Objects.requireNonNull(members, "members");
+            List<String> stripped = new ArrayList<>();
+            for (String member : members) {
+                stripped.add(Objects.requireNonNull(member, "member").strip());
+            }
+            members = List.copyOf(stripped); // defensive copy, unmodifiable
         }
     }
 
@@ -42,7 +48,21 @@ public class Exercise3_TeamRoster {
     record MonthHours(int month, int hours) { }
 
     static MonthHours busiestMonth(List<Shift> shifts) {
-        return null; // TODO
+        record Total(int month, int hours) { }
+
+        int[] hoursByMonth = new int[13]; // index 1..12
+        for (Shift shift : shifts) {
+            hoursByMonth[shift.month()] += shift.hours();
+        }
+
+        Total best = null;
+        for (int month = 1; month <= 12; month++) {
+            Total current = new Total(month, hoursByMonth[month]);
+            if (best == null || current.hours() > best.hours()) { // strict > keeps the earlier month on a tie
+                best = current;
+            }
+        }
+        return new MonthHours(best.month(), best.hours());
     }
 
     public static void main(String[] args) {

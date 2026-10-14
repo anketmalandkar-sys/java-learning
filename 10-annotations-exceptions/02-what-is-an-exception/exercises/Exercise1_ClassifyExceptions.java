@@ -37,15 +37,21 @@ import java.util.List;
 public class Exercise1_ClassifyExceptions {
 
     static String kind(Class<? extends Throwable> type) {
-        return ""; // TODO
+        if (Error.class.isAssignableFrom(type)) {
+            return "error";
+        }
+        if (RuntimeException.class.isAssignableFrom(type)) {
+            return "runtime";
+        }
+        return "checked";
     }
 
     static boolean mustCatchOrSpecify(Class<? extends Throwable> type) {
-        return false; // TODO
+        return kind(type).equals("checked");
     }
 
     static boolean handledBy(Class<? extends Throwable> thrown, Class<? extends Throwable> handler) {
-        return false; // TODO
+        return handler.isAssignableFrom(thrown);
     }
 
     public static void main(String[] args) {

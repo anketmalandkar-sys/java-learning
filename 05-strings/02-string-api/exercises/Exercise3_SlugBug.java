@@ -37,12 +37,12 @@ import java.util.Locale;
 public class Exercise3_SlugBug {
 
     static String slugFor(String version, String title) {
-        String[] parts = version.split(".");
+        String[] parts = version.split("\\.");
         String prefix = "v" + parts[0] + "-" + parts[1];
 
-        String words = title.toLowerCase()
-                .replaceAll(".", "")
-                .strip()
+        String words = title.toLowerCase(Locale.ROOT)
+                .replaceAll("\\.", "")
+                .trim()
                 .replaceAll("\\s+", "-");
 
         return prefix + "-" + words;

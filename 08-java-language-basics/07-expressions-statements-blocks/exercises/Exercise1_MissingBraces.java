@@ -32,19 +32,19 @@ public class Exercise1_MissingBraces {
     static int failures = 0;
     static boolean locked = false;
 
-    // TODO: fix the block bug
+    // Bug: without braces only "successes++" belonged to the if; "failures = 0" always ran.
     static void login(String user, String password) {
-        if (password.equals(PASSWORD))
+        if (password.equals(PASSWORD)) {
             successes++;
             failures = 0;
-        if (!password.equals(PASSWORD))
+        } else {
             failures++;
+        }
     }
 
-    // TODO: fix the block bug
+    // Bug: the ';' after the condition was an empty statement, so the block always ran.
     static void checkLockout() {
-        if (failures >= 3);
-        {
+        if (failures >= 3) {
             locked = true;
         }
     }

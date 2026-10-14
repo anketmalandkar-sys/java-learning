@@ -42,35 +42,35 @@ import java.util.List;
  */
 public class Exercise3_ErrorCodesToExceptions {
 
-    // TODO: delete these once book() throws exceptions
-    static final int OK = 0;
-    static final int BAD_SEATS = -1;
-    static final int UNKNOWN_SHOW = -2;
-    static final int SOLD_OUT = -3;
-
-    // TODO: class SoldOutException
+    static class SoldOutException extends Exception {
+        SoldOutException(String show) {
+            super(show + " is sold out");
+        }
+    }
 
     static java.util.Map<String, Integer> remaining;
 
-    static int book(String show, int seats) {
+    static void book(String show, int seats) throws SoldOutException {
         if (seats < 1 || seats > 10) {
-            return BAD_SEATS;
+            throw new IllegalArgumentException("seats must be 1..10");
         }
         Integer left = remaining.get(show);
         if (left == null) {
-            return UNKNOWN_SHOW;
+            throw new IllegalArgumentException("unknown show: " + show);
         }
         if (left < seats) {
-            return SOLD_OUT;
+            throw new SoldOutException(show);
         }
         remaining.put(show, left - seats);
-        return OK;
     }
 
     static String bookFirstAvailable(List<String> shows, int seats) {
         for (String show : shows) {
-            if (book(show, seats) == OK) {      // TODO: ignores BAD_SEATS and UNKNOWN_SHOW silently
+            try {
+                book(show, seats);
                 return show;
+            } catch (SoldOutException e) {
+                // try the next show
             }
         }
         return "none";

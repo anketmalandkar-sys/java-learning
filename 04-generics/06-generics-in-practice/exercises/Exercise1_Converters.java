@@ -44,22 +44,39 @@ public class Exercise1_Converters {
         T convert(S source);
 
         default <R> Converter<S, R> andThen(Converter<? super T, ? extends R> next) {
-            // TODO
-            return null;
+            return source -> next.convert(convert(source));
         }
     }
 
-    // TODO: make TrimUpper implement Converter<String, String>
-    static class TrimUpper {
+    static class TrimUpper implements Converter<String, String> {
+        @Override
+        public String convert(String source) {
+            return source.trim().toUpperCase();
+        }
     }
 
-    // TODO: make ParseQuantity implement Converter<String, Integer>
-    static class ParseQuantity {
+    static class ParseQuantity implements Converter<String, Integer> {
+        @Override
+        public Integer convert(String source) {
+            return Integer.parseInt(source.trim());
+        }
     }
 
-    // TODO: make EachOf<S, T> implement Converter<List<S>, List<T>>
-    static class EachOf<S, T> {
-        // TODO: a field for the element converter, and a constructor that takes it
+    static class EachOf<S, T> implements Converter<List<S>, List<T>> {
+        private final Converter<S, T> element;
+
+        EachOf(Converter<S, T> element) {
+            this.element = element;
+        }
+
+        @Override
+        public List<T> convert(List<S> source) {
+            List<T> result = new java.util.ArrayList<>();
+            for (S item : source) {
+                result.add(element.convert(item));
+            }
+            return result;
+        }
     }
 
     public static void main(String[] args) {
@@ -69,34 +86,30 @@ public class Exercise1_Converters {
         // Converter. Uncomment each block when its class is ready.
 
         allPass &= check("TrimUpper", () -> {
-            // Converter<String, String> trimUpper = new TrimUpper();
-            // return trimUpper.convert("  pune ").equals("PUNE") && trimUpper.convert("Goa").equals("GOA");
-            return false;
+            Converter<String, String> trimUpper = new TrimUpper();
+            return trimUpper.convert("  pune ").equals("PUNE") && trimUpper.convert("Goa").equals("GOA");
         });
 
         allPass &= check("ParseQuantity", () -> {
-            // Converter<String, Integer> parse = new ParseQuantity();
-            // return parse.convert(" 12 ") == 12 && parse.convert("0") == 0;
-            return false;
+            Converter<String, Integer> parse = new ParseQuantity();
+            return parse.convert(" 12 ") == 12 && parse.convert("0") == 0;
         });
 
         allPass &= check("EachOf", () -> {
-            // Converter<List<String>, List<Integer>> parseAll = new EachOf<>(new ParseQuantity());
-            // Converter<List<String>, List<String>> shoutAll = new EachOf<>(new TrimUpper());
-            // return parseAll.convert(List.of("1", " 2", "30 ")).equals(List.of(1, 2, 30))
-            //         && shoutAll.convert(List.of("a ", " b")).equals(List.of("A", "B"))
-            //         && parseAll.convert(List.of()).isEmpty();
-            return false;
+            Converter<List<String>, List<Integer>> parseAll = new EachOf<>(new ParseQuantity());
+            Converter<List<String>, List<String>> shoutAll = new EachOf<>(new TrimUpper());
+            return parseAll.convert(List.of("1", " 2", "30 ")).equals(List.of(1, 2, 30))
+                    && shoutAll.convert(List.of("a ", " b")).equals(List.of("A", "B"))
+                    && parseAll.convert(List.of()).isEmpty();
         });
 
         allPass &= check("andThen", () -> {
-            // Converter<String, Integer> nameLength = new TrimUpper().andThen(s -> s.length());
-            // Converter<String, Integer> doubled = new ParseQuantity().andThen(n -> n * 2);
-            // Converter<String, String> label = new ParseQuantity().andThen(n -> "qty=" + n);
-            // return nameLength.convert("  pune ") == 4
-            //         && doubled.convert(" 21") == 42
-            //         && label.convert("3").equals("qty=3");
-            return false;
+            Converter<String, Integer> nameLength = new TrimUpper().andThen(s -> s.length());
+            Converter<String, Integer> doubled = new ParseQuantity().andThen(n -> n * 2);
+            Converter<String, String> label = new ParseQuantity().andThen(n -> "qty=" + n);
+            return nameLength.convert("  pune ") == 4
+                    && doubled.convert(" 21") == 42
+                    && label.convert("3").equals("qty=3");
         });
 
         System.out.println(allPass ? "ALL PASS" : "SOME FAILED");

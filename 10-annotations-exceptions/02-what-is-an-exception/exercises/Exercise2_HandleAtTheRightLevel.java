@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,23 +53,32 @@ public class Exercise2_HandleAtTheRightLevel {
     static Map<String, Integer> stock;
 
     // Bottom layer.
-    static void reserveStock(String sku, int qty) {
-        try {
-            int available = stock.getOrDefault(sku, 0);
-            if (qty > available) {
-                throw new OutOfStockException(sku, qty, available);
-            }
-            stock.put(sku, available - qty);
-        } catch (OutOfStockException e) {
-            System.out.println("  (reserveStock swallowed: " + e.getMessage() + ")");   // TODO: wrong level
+    static void checkStock(String sku, int qty) throws OutOfStockException {
+        int available = stock.getOrDefault(sku, 0);
+        if (qty > available) {
+            throw new OutOfStockException(sku, qty, available);
         }
     }
 
+    static void reserveStock(String sku, int qty) throws OutOfStockException {
+        checkStock(sku, qty);
+        stock.put(sku, stock.get(sku) - qty);
+    }
+
     // Middle layer.
-    static void importOrder(Order order) {
+    static void importOrder(Order order) throws OutOfStockException {
+        // Total per SKU, so "PEN:3" and "PEN:9" in one order are checked together.
+        Map<String, Integer> wanted = new LinkedHashMap<>();
         for (String line : order.lines()) {
             String[] parts = line.split(":");
-            reserveStock(parts[0], Integer.parseInt(parts[1]));
+            wanted.merge(parts[0], Integer.parseInt(parts[1]), Integer::sum);
+        }
+        // Check everything first, so a rejected order reserves nothing.
+        for (Map.Entry<String, Integer> e : wanted.entrySet()) {
+            checkStock(e.getKey(), e.getValue());
+        }
+        for (Map.Entry<String, Integer> e : wanted.entrySet()) {
+            reserveStock(e.getKey(), e.getValue());
         }
     }
 
@@ -77,8 +87,12 @@ public class Exercise2_HandleAtTheRightLevel {
         List<String> imported = new ArrayList<>();
         List<String> rejected = new ArrayList<>();
         for (Order order : orders) {
-            importOrder(order);
-            imported.add(order.id());
+            try {
+                importOrder(order);
+                imported.add(order.id());
+            } catch (OutOfStockException e) {
+                rejected.add(order.id() + ": " + e.getMessage());
+            }
         }
         return new ImportResult(imported, rejected);
     }

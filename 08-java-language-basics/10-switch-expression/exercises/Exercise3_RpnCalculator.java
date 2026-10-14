@@ -45,8 +45,54 @@ public class Exercise3_RpnCalculator {
 
     static long evaluate(String expression) {
         Deque<Long> stack = new ArrayDeque<>();
-        // TODO
-        return 0;
+        for (String token : expression.trim().split(" +")) {
+            boolean isOperator = switch (token) {
+                case "+", "-", "*", "/", "%", "^", "max" -> true;
+                default -> false;
+            };
+            if (!isOperator) {
+                stack.push(parseNumber(token));
+                continue;
+            }
+            if (stack.size() < 2) {
+                throw new IllegalArgumentException("not enough operands");
+            }
+            long b = stack.pop();
+            long a = stack.pop();
+            long result = switch (token) {
+                case "+" -> a + b;
+                case "-" -> a - b;
+                case "*" -> a * b;
+                case "/", "%" -> {
+                    if (b == 0) {
+                        throw new IllegalArgumentException("division by zero");
+                    }
+                    yield token.equals("/") ? a / b : a % b;
+                }
+                case "^" -> {
+                    long power = 1;
+                    for (long i = 0; i < b; i++) {
+                        power *= a;
+                    }
+                    yield power;
+                }
+                case "max" -> Math.max(a, b);
+                default -> throw new IllegalStateException("not an operator: " + token);
+            };
+            stack.push(result);
+        }
+        if (stack.size() != 1) {
+            throw new IllegalArgumentException("invalid expression");
+        }
+        return stack.pop();
+    }
+
+    static long parseNumber(String token) {
+        try {
+            return Long.parseLong(token);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("unknown token: " + token);
+        }
     }
 
     public static void main(String[] args) {

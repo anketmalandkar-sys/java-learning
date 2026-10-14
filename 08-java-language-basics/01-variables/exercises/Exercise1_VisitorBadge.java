@@ -25,23 +25,24 @@
 public class Exercise1_VisitorBadge {
 
     static class Visitor {
-        // TODO: static field counting visitors
+        static int count = 0;   // shared by all visitors
 
-        // TODO: instance field for this visitor's badge number
+        final int badge;        // one per visitor
 
         final String name;
 
         Visitor(String name) {
             this.name = name;
-            // TODO: increase the counter and assign this visitor's badge number
+            count++;
+            this.badge = count;
         }
 
         int badgeNumber() {
-            return 0; // TODO
+            return badge;
         }
 
         static int totalVisitors() {
-            return 0; // TODO
+            return count;
         }
     }
 

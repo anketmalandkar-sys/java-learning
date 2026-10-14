@@ -39,23 +39,43 @@ import java.util.function.Supplier;
  */
 public class Exercise1_WildcardSignatures {
 
-    static double totalWeight(List<?> weights) {
-        // TODO: choose the wildcard, then implement
-        return -1;
+    // Producer: reads Numbers out.
+    static double totalWeight(List<? extends Number> weights) {
+        double sum = 0;
+        for (Number w : weights) {
+            sum += w.doubleValue();
+        }
+        return sum;
     }
 
-    static double averageOf(List<?> values) {
-        // TODO: choose the wildcard, then implement
-        return -1;
+    // Producer: reads Numbers out.
+    static double averageOf(List<? extends Number> values) {
+        if (values.isEmpty()) {
+            return 0.0;
+        }
+        double sum = 0;
+        for (Number v : values) {
+            sum += v.doubleValue();
+        }
+        return sum / values.size();
     }
 
-    static void addZeros(List<?> target, int count) {
-        // TODO: choose the wildcard, then implement
+    // Consumer: puts Integers in.
+    static void addZeros(List<? super Integer> target, int count) {
+        for (int i = 0; i < count; i++) {
+            target.add(0);
+        }
     }
 
+    // Only looks at items as Objects: plain ? is right.
     static int countNonNull(List<?> items) {
-        // TODO: choose the wildcard, then implement
-        return -1;
+        int count = 0;
+        for (Object item : items) {
+            if (item != null) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static void main(String[] args) {

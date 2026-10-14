@@ -37,31 +37,48 @@ public class Exercise4_EditInPlace {
 
     static String maskCard(String number) {
         StringBuilder sb = new StringBuilder(number);
-        // TODO
+        int digitsFromEnd = 0;
+        for (int i = sb.length() - 1; i >= 0; i--) {
+            if (Character.isDigit(sb.charAt(i))) {
+                digitsFromEnd++;
+                if (digitsFromEnd > 4) {
+                    sb.setCharAt(i, '*');
+                }
+            }
+        }
         return sb.toString();
     }
 
     static String withSeparators(String digits) {
         StringBuilder sb = new StringBuilder(digits);
-        // TODO
+        for (int i = sb.length() - 3; i > 0; i -= 3) {
+            sb.insert(i, ',');
+        }
         return sb.toString();
     }
 
     static String removeVowels(String text) {
         StringBuilder sb = new StringBuilder(text);
-        // TODO
+        for (int i = sb.length() - 1; i >= 0; i--) {
+            if ("aeiouAEIOU".indexOf(sb.charAt(i)) >= 0) {
+                sb.deleteCharAt(i);
+            }
+        }
         return sb.toString();
     }
 
     static String shorten(String text, int max) {
         StringBuilder sb = new StringBuilder(text);
-        // TODO
+        if (sb.length() > max) {
+            sb.setLength(max - 3);
+            sb.append("...");
+        }
         return sb.toString();
     }
 
     static String swapDomain(String email, String domain) {
         StringBuilder sb = new StringBuilder(email);
-        // TODO
+        sb.replace(sb.indexOf("@") + 1, sb.length(), domain);
         return sb.toString();
     }
 

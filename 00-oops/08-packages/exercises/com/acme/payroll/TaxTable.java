@@ -3,9 +3,9 @@ package com.acme.payroll;
 /**
  * Part of Exercise 2. An internal helper of the payroll package.
  */
-public class TaxTable {   // TODO: should not be visible outside com.acme.payroll
+class TaxTable {   // package-private: invisible outside com.acme.payroll
 
-    public static int taxPercentFor(long annualRupees) {   // TODO
+    static int taxPercentFor(long annualRupees) {
         if (annualRupees <= 700_000) {
             return 0;
         }

@@ -62,13 +62,9 @@ public class Exercise3_LostExceptions {
         }
     }
 
-    // TODO 1
     static void upload(String data, boolean failWrite, boolean failClose) throws IOException {
-        Channel ch = new Channel(failWrite, failClose);
-        try {
+        try (Channel ch = new Channel(failWrite, failClose)) {
             ch.write(data);
-        } finally {
-            ch.close();
         }
     }
 
@@ -80,15 +76,12 @@ public class Exercise3_LostExceptions {
         }
     }
 
-    // TODO 2
-    @SuppressWarnings("finally")
     static String tryCharge(int amount) {
         try {
             charge(amount);
             return "charged " + amount;
         } finally {
             ATTEMPTS++;
-            return "done";
         }
     }
 

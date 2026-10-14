@@ -1,4 +1,5 @@
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 
 /**
  * Exercise 3 (Hard): a sign-up service that doesn't understand Unicode.
@@ -37,17 +38,27 @@ public class Exercise3_UsernameBug {
 
     static class SignupService {
 
+        // Bug 1: length() counts UTF-16 chars, and each emoji is TWO chars (a surrogate pair),
+        // so Priya + 6 emoji was 17. Count code points instead.
         static boolean validLength(String username) {
-            int length = username.length();
+            int length = username.codePointCount(0, username.length());
             return length >= 3 && length <= 12;
         }
 
+        // Bug 2: the app sends UTF-8, but the bytes were decoded as ISO-8859-1, which turns each
+        // byte of a multi-byte character into its own wrong character. Decode with the charset used to encode.
         static String decodeDisplayName(byte[] requestBody) {
-            return new String(requestBody, StandardCharsets.ISO_8859_1);
+            return new String(requestBody, StandardCharsets.UTF_8);
         }
 
+        // Bug 3: the Mac sends "e" + a combining accent (2 code points), Windows sends one
+        // precomposed letter. Normalize both to the same form (NFC) before comparing.
         static boolean sameDisplayName(String a, String b) {
-            return a.equalsIgnoreCase(b);
+            return normalize(a).equalsIgnoreCase(normalize(b));
+        }
+
+        private static String normalize(String s) {
+            return Normalizer.normalize(s, Normalizer.Form.NFC);
         }
     }
 

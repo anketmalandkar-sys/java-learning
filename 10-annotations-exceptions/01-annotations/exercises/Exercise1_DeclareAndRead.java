@@ -35,15 +35,19 @@ import java.lang.reflect.Method;
  */
 public class Exercise1_DeclareAndRead {
 
-    // TODO: add the meta-annotations and the three elements
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
     @interface Endpoint {
+        String path();
+        String method() default "GET";
+        int timeoutSeconds() default 30;
     }
 
     static class OrderApi {
-        // TODO: @Endpoint with path "/orders" (default method and timeout)
+        @Endpoint(path = "/orders")
         public void listOrders() { }
 
-        // TODO: @Endpoint with path "/orders", method "POST", timeout 10
+        @Endpoint(path = "/orders", method = "POST", timeoutSeconds = 10)
         public void createOrder() { }
 
         // not an endpoint: no annotation
@@ -51,7 +55,11 @@ public class Exercise1_DeclareAndRead {
     }
 
     static String describe(Method m) {
-        return ""; // TODO
+        Endpoint e = m.getAnnotation(Endpoint.class);
+        if (e == null) {
+            return "not an endpoint";
+        }
+        return e.method() + " " + e.path() + " (" + e.timeoutSeconds() + "s)";
     }
 
     public static void main(String[] args) throws Exception {

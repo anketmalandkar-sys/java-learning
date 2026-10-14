@@ -1,5 +1,7 @@
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -46,22 +48,34 @@ public class Exercise2_CommandMatcher {
 
     static boolean isCommand(String input, String command) {
         // TODO
+        if (Objects.nonNull(input) && Objects.nonNull(command)) {
+            return input.strip().toLowerCase(Locale.ROOT).equals(command.toLowerCase(Locale.ROOT));
+        }
         return false;
     }
 
     static int countCommands(List<String> inputs, String command) {
         // TODO
-        return -1;
+        if (Objects.nonNull(inputs) && Objects.nonNull(command)) {
+            return Math.toIntExact(inputs.stream().filter(s -> isCommand(s, command)).count());
+        }
+        return 0;
     }
 
     static boolean sameUser(String a, String b) {
         // TODO
-        return false;
+        if (Objects.isNull(a) || Objects.isNull(b)) {
+            return false;
+        }
+        return a.strip().toLowerCase(Locale.ROOT).equals(b.strip().toLowerCase(Locale.ROOT));
     }
 
     static String canonicalCountry(String code) {
         // TODO
-        return "";
+        if (Objects.isNull(code)) {
+            return null;
+        }
+        return code.strip().toUpperCase(Locale.ROOT).intern();
     }
 
     public static void main(String[] args) {

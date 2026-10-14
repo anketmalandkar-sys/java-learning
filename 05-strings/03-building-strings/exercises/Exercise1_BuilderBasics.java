@@ -42,23 +42,56 @@ import java.util.function.Supplier;
 public class Exercise1_BuilderBasics {
 
     static String reverseWords(String sentence) {
-        // TODO
-        return null;
+        String[] words = sentence.split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (int i = words.length - 1; i >= 0; i--) {
+            sb.append(words[i]);
+            if (i > 0) {
+                sb.append(' ');
+            }
+        }
+        return sb.toString();
     }
 
     static String csvRow(List<String> fields) {
-        // TODO
-        return null;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < fields.size(); i++) {
+            if (i > 0) {
+                sb.append(',');
+            }
+            sb.append(fields.get(i));
+        }
+        return sb.toString();
     }
 
     static String progressBar(int percent) {
-        // TODO
-        return null;
+        int full = percent / 10;
+        return new StringBuilder()
+                .append('[')
+                .append("#".repeat(full))
+                .append("-".repeat(10 - full))
+                .append("] ")
+                .append(percent)
+                .append('%')
+                .toString();
     }
 
     static String compress(String text) {
-        // TODO
-        return null;
+        StringBuilder sb = new StringBuilder();
+        int i = 0;
+        while (i < text.length()) {
+            char c = text.charAt(i);
+            int run = 1;
+            while (i + run < text.length() && text.charAt(i + run) == c) {
+                run++;
+            }
+            sb.append(c);
+            if (run > 1) {
+                sb.append(run);
+            }
+            i += run;
+        }
+        return sb.toString();
     }
 
     public static void main(String[] args) {

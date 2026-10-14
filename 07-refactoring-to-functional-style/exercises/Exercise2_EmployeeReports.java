@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Exercise 2 (Medium): employee reports, from loops to pipelines.
@@ -57,8 +58,12 @@ public class Exercise2_EmployeeReports {
     }
 
     static List<String> activeNamesIn(List<Employee> employees, String dept) {
-        // TODO
-        return List.of();
+        return employees.stream()
+                .filter(e -> e.active() && e.department().equals(dept))
+                .map(Employee::name)
+                .map(String::toUpperCase)
+                .sorted()
+                .toList();
     }
 
     static int payrollImperative(List<Employee> employees, String dept) {
@@ -72,8 +77,10 @@ public class Exercise2_EmployeeReports {
     }
 
     static int payroll(List<Employee> employees, String dept) {
-        // TODO
-        return -1;
+        return employees.stream()
+                .filter(e -> e.active() && e.department().equals(dept))
+                .mapToInt(Employee::salary)
+                .sum();
     }
 
     static Map<String, Long> activeHeadcountImperative(List<Employee> employees) {
@@ -87,8 +94,9 @@ public class Exercise2_EmployeeReports {
     }
 
     static Map<String, Long> activeHeadcount(List<Employee> employees) {
-        // TODO
-        return Map.of();
+        return employees.stream()
+                .filter(Employee::active)
+                .collect(Collectors.groupingBy(Employee::department, Collectors.counting()));
     }
 
     public static void main(String[] args) {

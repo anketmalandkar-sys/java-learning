@@ -26,19 +26,27 @@
 public class Exercise1_DigitsAndTime {
 
     static boolean isEven(int n) {
-        return false; // TODO
+        return n % 2 == 0;
     }
 
     static boolean isOdd(int n) {
-        return false; // TODO
+        return n % 2 != 0;   // not "== 1": -3 % 2 is -1
     }
 
     static int digitSum(int n) {
-        return 0; // TODO
+        int sum = 0;
+        while (n > 0) {
+            sum += n % 10;
+            n /= 10;
+        }
+        return sum;
     }
 
     static String formatDuration(int totalSeconds) {
-        return ""; // TODO
+        int hours = totalSeconds / 3600;
+        int minutes = totalSeconds % 3600 / 60;
+        int seconds = totalSeconds % 60;
+        return hours + ":" + String.format("%02d", minutes) + ":" + String.format("%02d", seconds);
     }
 
     public static void main(String[] args) {

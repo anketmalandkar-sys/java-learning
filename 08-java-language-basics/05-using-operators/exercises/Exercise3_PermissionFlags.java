@@ -33,32 +33,38 @@
  */
 public class Exercise3_PermissionFlags {
 
-    static final int READ = 0;      // TODO: use 1 << n
-    static final int WRITE = 0;     // TODO
-    static final int EXECUTE = 0;   // TODO
+    static final int READ = 1 << 0;
+    static final int WRITE = 1 << 1;
+    static final int EXECUTE = 1 << 2;
 
     static int grant(int perms, int flag) {
-        return perms; // TODO
+        return perms | flag;
     }
 
     static int revoke(int perms, int flag) {
-        return perms; // TODO
+        return perms & ~flag;
     }
 
     static int toggle(int perms, int flag) {
-        return perms; // TODO
+        return perms ^ flag;
     }
 
     static boolean has(int perms, int flag) {
-        return false; // TODO
+        return (perms & flag) == flag;
     }
 
     static String format(int perms) {
-        return "---"; // TODO
+        return (has(perms, READ) ? "r" : "-")
+                + (has(perms, WRITE) ? "w" : "-")
+                + (has(perms, EXECUTE) ? "x" : "-");
     }
 
     static int parse(String text) {
-        return 0; // TODO
+        int perms = 0;
+        if (text.charAt(0) != '-') perms |= READ;
+        if (text.charAt(1) != '-') perms |= WRITE;
+        if (text.charAt(2) != '-') perms |= EXECUTE;
+        return perms;
     }
 
     public static void main(String[] args) {

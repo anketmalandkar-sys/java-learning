@@ -34,11 +34,15 @@ import java.util.List;
  */
 public class Exercise2_PredictInitOrder {
 
-    // TODO: your predictions
-    static final List<String> FIRST = List.of();
-    static final List<String> SECOND = List.of();
-    static final boolean READING_CONSTANT_INITIALIZES = true;
-    static final boolean READING_LIST_INITIALIZES = false;
+    static final List<String> FIRST = List.of(
+            "Store static", "CornerStore static",
+            "Store field", "Store block", "Store()",
+            "CornerStore block", "CornerStore(A)");
+    static final List<String> SECOND = List.of(
+            "Store field", "Store block", "Store()",
+            "CornerStore block", "CornerStore(B)");
+    static final boolean READING_CONSTANT_INITIALIZES = false;
+    static final boolean READING_LIST_INITIALIZES = true;
 
     static final List<String> LOG = new ArrayList<>();
 

@@ -42,11 +42,15 @@ public class Exercise3_ChangeMachine {
     }
 
     static long coinsForChange(long paidCents, long priceCents) {
-        return 0; // TODO
+        if (paidCents < priceCents) {
+            return -1;
+        }
+        return (paidCents - priceCents) / 5;   // integer division rounds down
     }
 
     static String formatCents(long cents) {
-        return ""; // TODO
+        long remainder = cents % 100;
+        return "$" + cents / 100 + "." + (remainder < 10 ? "0" : "") + remainder;
     }
 
     public static void main(String[] args) {

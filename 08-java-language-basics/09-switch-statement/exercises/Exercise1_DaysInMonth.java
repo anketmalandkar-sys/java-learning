@@ -25,11 +25,45 @@
 public class Exercise1_DaysInMonth {
 
     static int daysInMonth(int month, int year) {
-        return 0; // TODO
+        int days;
+        switch (month) {
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                days = 30;
+                break;
+            case 2:
+                boolean leap = (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+                days = leap ? 29 : 28;
+                break;
+            default:
+                days = month >= 1 && month <= 12 ? 31 : -1;
+                break;
+        }
+        return days;
     }
 
     static String quarter(int month) {
-        return ""; // TODO
+        String q;
+        switch (month) {
+            case 1: case 2: case 3:
+                q = "Q1";
+                break;
+            case 4: case 5: case 6:
+                q = "Q2";
+                break;
+            case 7: case 8: case 9:
+                q = "Q3";
+                break;
+            case 10: case 11: case 12:
+                q = "Q4";
+                break;
+            default:
+                q = "INVALID";
+                break;
+        }
+        return q;
     }
 
     public static void main(String[] args) {

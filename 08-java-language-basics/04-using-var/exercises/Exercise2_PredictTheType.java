@@ -46,15 +46,14 @@ public class Exercise2_PredictTheType {
         var h = new ArrayList<>(List.of(1, 2));
 
         boolean allPass = true;
-        // TODO: replace each "?" with your prediction: (variable, predicted class, predicted value)
-        allPass &= check("a", a, "?", "?");
-        allPass &= check("b", b, "?", "?");
-        allPass &= check("c", c, "?", "?");
-        allPass &= check("d", d, "?", "?");
-        allPass &= check("e", e, "?", "?");
-        allPass &= check("f", f, "?", "?");
-        allPass &= check("g", g, "?", "?");
-        allPass &= check("h", h, "?", "[1, 2]");
+        allPass &= check("a", a, "Integer", "3");          // int / int: integer division
+        allPass &= check("b", b, "Double", "3.5");         // one double operand makes it double
+        allPass &= check("c", c, "Integer", "67");         // char + int is an int ('A' is 65)
+        allPass &= check("d", d, "Character", "C");        // cast back to char
+        allPass &= check("e", e, "String", "33");          // (1 + 2) first, then + "3"
+        allPass &= check("f", f, "String", "123");         // a String from the start: all concatenation
+        allPass &= check("g", g, "Long", "3000000");       // long / int is long
+        allPass &= check("h", h, "ArrayList", "[1, 2]");   // var keeps the concrete class
         System.out.println(allPass ? "ALL PASS" : "SOME FAILED");
     }
 

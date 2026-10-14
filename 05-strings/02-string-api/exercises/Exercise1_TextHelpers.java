@@ -1,4 +1,7 @@
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Exercise 1 (Easy): everyday text helpers.
@@ -44,22 +47,57 @@ public class Exercise1_TextHelpers {
 
     static String initials(String fullName) {
         // TODO
-        return null;
+        return Arrays.stream(fullName.strip().split("\\s+"))
+                .filter(word -> !word.isEmpty())
+                .map(word -> String.valueOf(Character.toUpperCase(word.charAt(0))))
+                .collect(Collectors.joining());
     }
 
     static String maskCard(String cardNumber) {
         // TODO
-        return null;
+        int length = cardNumber.length();
+        return "*".repeat(length - 4).concat(cardNumber.substring(length - 4));
     }
 
     static boolean isPalindrome(String text) {
         // TODO
-        return false;
+        if (text == null) {
+            return false;
+        }
+
+        // Keep only letters and digits, and convert to lowercase for case-insensitive check
+        String cleaned = text.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+
+        int left = 0;
+        int right = cleaned.length() - 1;
+
+        // Compare characters from both ends moving inward
+        while (left < right) {
+            if (cleaned.charAt(left) != cleaned.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
     }
 
     static int countOccurrences(String text, String word) {
-        // TODO
-        return -1;
+        if (text == null || word == null || word.isEmpty() || text.isEmpty()) {
+            return 0;
+        }
+
+        int count = 0;
+        int index = 0;
+
+        // Use indexOf in a loop, advancing by word.length() to prevent overlapping
+        while ((index = text.indexOf(word, index)) != -1) {
+            count++;
+            index += word.length(); // Move past the current match
+        }
+
+        return count;
     }
 
     public static void main(String[] args) {

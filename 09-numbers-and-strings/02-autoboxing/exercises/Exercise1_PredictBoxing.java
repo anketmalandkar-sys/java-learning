@@ -27,15 +27,14 @@
  */
 public class Exercise1_PredictBoxing {
 
-    // TODO: your predictions
-    static boolean q1 = false;
-    static boolean q2 = false;
-    static boolean q3 = false;
-    static boolean q4 = false;
-    static boolean q5 = false;
-    static boolean q6 = false;
-    static boolean q7 = false;
-    static boolean q8 = false;
+    static boolean q1 = true;    // 100 is in the Integer cache (-128..127): same object
+    static boolean q2 = false;   // 1000 isn't cached: two different objects
+    static boolean q3 = true;    // equals compares values
+    static boolean q4 = true;    // wrapper == primitive: e is unboxed, values compared
+    static boolean q5 = false;   // 5 boxes to an Integer, and a Long never equals an Integer
+    static boolean q6 = true;    // same type, same value
+    static boolean q7 = true;    // long == Long: i is unboxed
+    static boolean q8 = true;    // Characters 0..127 are cached
 
     public static void main(String[] args) {
         Integer a = 100, b = 100;

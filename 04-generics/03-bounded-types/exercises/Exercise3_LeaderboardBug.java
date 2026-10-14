@@ -68,8 +68,8 @@ public class Exercise3_LeaderboardBug {
         int teamSize() { return teamSize; }
     }
 
-    // BUG: a raw bound. The compiler can no longer check what T is compared with.
-    static <T extends Comparable> T topPerformer(List<T> items) {
+    // T must be comparable with itself OR with a parent: a Manager is a Comparable<Employee>.
+    static <T extends Comparable<? super T>> T topPerformer(List<T> items) {
         T best = items.get(0);
         for (T item : items) {
             if (item.compareTo(best) > 0) {
@@ -77,15 +77,6 @@ public class Exercise3_LeaderboardBug {
             }
         }
         return best;
-    }
-
-    // Some employees, and a free-text entry somebody added. Each one is "a Comparable".
-    static List<Comparable<?>> monthlyHighlights() {
-        return List.of(new Employee("Ravi", 120), "Meera: 340 sales", new Employee("Arjun", 210));
-    }
-
-    static Object highlightOfTheMonth() {
-        return topPerformer(monthlyHighlights());
     }
 
     public static void main(String[] args) {
@@ -105,8 +96,6 @@ public class Exercise3_LeaderboardBug {
 
         Integer bestScore = topPerformer(scores);
         allPass &= report("scores", bestScore == 95);
-
-        System.out.println("highlight: " + highlightOfTheMonth());   // DELETE once it stops compiling
 
         System.out.println(allPass ? "ALL PASS" : "SOME FAILED");
     }

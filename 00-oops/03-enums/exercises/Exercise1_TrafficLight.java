@@ -25,23 +25,37 @@
 public class Exercise1_TrafficLight {
 
     // TODO: replace this placeholder with the real enum, including next()
-    enum Light { PLACEHOLDER }
+    enum Light { RED, GREEN, YELLOW;
+
+        Light next() {
+            Light[] all = values();
+            return all[(ordinal() + 1) % all.length];
+        }
+    }
 
     static int secondsFor(Light light) {
-        return 0; // TODO: switch expression
+        return switch (light) {
+            case RED -> 30;
+            case GREEN -> 25;
+            case YELLOW -> 5;
+        }; // TODO: switch expression
     }
 
     static int cycleSeconds() {
-        return 0; // TODO
+        int total = 0;
+        for (Light light : Light.values()) {
+            total += secondsFor(light);
+        }
+        return total; // TODO
     }
 
     public static void main(String[] args) {
         boolean allPass = true;
         // uncomment:
-        // allPass &= check("next:", Light.RED.next() == Light.GREEN && Light.GREEN.next() == Light.YELLOW);
-        // allPass &= check("wrap:", Light.YELLOW.next() == Light.RED);
-        // allPass &= check("timing:", secondsFor(Light.RED) == 30 && secondsFor(Light.GREEN) == 25
-        //         && secondsFor(Light.YELLOW) == 5);
+         allPass &= check("next:", Light.RED.next() == Light.GREEN && Light.GREEN.next() == Light.YELLOW);
+         allPass &= check("wrap:", Light.YELLOW.next() == Light.RED);
+         allPass &= check("timing:", secondsFor(Light.RED) == 30 && secondsFor(Light.GREEN) == 25
+                 && secondsFor(Light.YELLOW) == 5);
         allPass &= check("cycle:", cycleSeconds() == 60);
         System.out.println(allPass ? "ALL PASS" : "SOME FAILED");
     }

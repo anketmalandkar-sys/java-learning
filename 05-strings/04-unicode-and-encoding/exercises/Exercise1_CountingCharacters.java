@@ -1,4 +1,6 @@
+import java.nio.charset.StandardCharsets;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Exercise 1 (Easy): counting characters properly.
@@ -39,23 +41,21 @@ public class Exercise1_CountingCharacters {
     static final String E_ACUTE = Character.toString(0x00E9);
 
     static int codePointLength(String text) {
-        // TODO
-        return -1;
+        return text.codePointCount(0, text.length());
     }
 
     static int utf8Size(String text) {
-        // TODO
-        return -1;
+        return text.getBytes(StandardCharsets.UTF_8).length;
     }
 
     static boolean isAscii(String text) {
-        // TODO
-        return false;
+        return text.chars().allMatch(c -> c < 128);
     }
 
     static String describe(String text) {
-        // TODO
-        return null;
+        return text.codePoints()
+                .mapToObj(cp -> String.format("U+%04X", cp))
+                .collect(Collectors.joining(" "));
     }
 
     public static void main(String[] args) {

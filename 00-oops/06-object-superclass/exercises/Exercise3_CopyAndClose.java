@@ -42,12 +42,17 @@ public class Exercise3_CopyAndClose {
             this.traveller = traveller;
         }
 
-        // TODO: copy constructor Itinerary(Itinerary other)
+        Itinerary(Itinerary other) {
+            this.traveller = other.traveller;            // String is immutable, sharing is safe
+            this.stops = new ArrayList<>(other.stops);   // a new list, not the same one
+        }
 
         @Override
         public Itinerary clone() {
             try {
-                return (Itinerary) super.clone();   // TODO: shallow
+                Itinerary copy = (Itinerary) super.clone();   // copies fields: both share one list
+                copy.stops = new ArrayList<>(stops);          // give the copy its own list
+                return copy;
             } catch (CloneNotSupportedException e) {
                 throw new AssertionError(e);
             }
@@ -55,10 +60,10 @@ public class Exercise3_CopyAndClose {
     }
 
     static Itinerary copyOf(Itinerary other) {
-        return other; // TODO: return a copy made with the copy constructor
+        return new Itinerary(other);
     }
 
-    static class Connection {   // TODO: implements AutoCloseable
+    static class Connection implements AutoCloseable {
         static int OPEN_COUNT = 0;
         boolean open = true;
 
@@ -73,16 +78,19 @@ public class Exercise3_CopyAndClose {
             return "rows for " + sql;
         }
 
-        // Called by nobody: the old "finalize" approach.
-        void cleanup() {
-            open = false;
-            OPEN_COUNT--;
+        @Override
+        public void close() {   // no "throws Exception": closing a Connection can't fail
+            if (open) {         // idempotent: a second close does nothing
+                open = false;
+                OPEN_COUNT--;
+            }
         }
     }
 
     static String runReport(String sql) {
-        Connection c = new Connection();     // TODO: try-with-resources
-        return c.query(sql);
+        try (Connection c = new Connection()) {
+            return c.query(sql);   // c.close() runs after the return value is computed, or if query throws
+        }
     }
 
     public static void main(String[] args) {

@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -50,24 +52,33 @@ public class Exercise3_LogReportBug {
         return line.split(" ")[2];
     }
 
+    // Bug 1: a stream can only be used once. count() consumed it, so the second pipeline threw
+    // IllegalStateException. Now ONE pass counts both, and try-with-resources closes the file.
     static long errorPercent(Path file) throws IOException {
-        Stream<String> lines = Files.lines(file);
-        long total = lines.count();
-        long errors = lines.filter(line -> line.endsWith(" 500")).count();
-        return errors * 100 / total;
+        try (Stream<String> lines = Files.lines(file)) {
+            Map<Boolean, Long> byError = lines.collect(
+                    Collectors.partitioningBy(line -> line.endsWith(" 500"), Collectors.counting()));
+            long errors = byError.get(true);
+            long total = errors + byError.get(false);
+            return total == 0 ? 0 : errors * 100 / total;
+        }
     }
 
+    // Bug 2: limit(n) BEFORE filter took the first n requests and then kept the slow ones among
+    // them. The question is "the first n slow requests": filter first, then limit.
     static List<String> firstSlowPaths(List<String> requests, int n) {
         return requests.stream()
-                .limit(n)
                 .filter(line -> durationOf(line) > 1000)
+                .limit(n)
                 .map(Exercise3_LogReportBug::pathOf)
                 .toList();
     }
 
+    // Bug 3: filter only dropped the SHUTDOWN line itself and kept everything after it.
+    // takeWhile stops at the first line that doesn't match.
     static List<String> requestsBeforeShutdown(List<String> lines) {
         return lines.stream()
-                .filter(line -> !line.equals("SHUTDOWN"))
+                .takeWhile(line -> !line.equals("SHUTDOWN"))
                 .toList();
     }
 

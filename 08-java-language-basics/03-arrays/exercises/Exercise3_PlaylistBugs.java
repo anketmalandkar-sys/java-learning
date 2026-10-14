@@ -35,7 +35,8 @@ import java.util.Arrays;
 public class Exercise3_PlaylistBugs {
 
     static String[] shuffledPreview(String[] playlist) {
-        String[] copy = playlist;
+        // Bug: "copy = playlist" copied the reference, so both names pointed at the caller's array.
+        String[] copy = playlist.clone();
         // "Shuffle" by reversing: simple and predictable for the checks.
         for (int i = 0; i < copy.length / 2; i++) {
             String temp = copy[i];
@@ -46,7 +47,8 @@ public class Exercise3_PlaylistBugs {
     }
 
     static boolean sameOrder(String[] a, String[] b) {
-        return a.equals(b);
+        // Bug: arrays don't override equals, so a.equals(b) is the same as a == b (same object).
+        return Arrays.equals(a, b);
     }
 
     static void rotateLeft(String[] playlist) {
@@ -57,11 +59,14 @@ public class Exercise3_PlaylistBugs {
         for (int i = 0; i < playlist.length - 1; i++) {
             playlist[i] = playlist[i + 1];
         }
-        playlist[0] = first;
+        // Bug: the first song belongs at the END, not back at index 0.
+        playlist[playlist.length - 1] = first;
     }
 
     static String[] withSong(String[] playlist, String song) {
-        return playlist; // TODO
+        String[] longer = Arrays.copyOf(playlist, playlist.length + 1);
+        longer[playlist.length] = song;
+        return longer;
     }
 
     public static void main(String[] args) {

@@ -54,21 +54,24 @@ public class Exercise3_HeapPollutionBug {
             values.put(key, value);
         }
 
-        @SuppressWarnings("unchecked")
+        // Bug 1 was: after erasure, (T) is a cast to Object, so it checks nothing at runtime.
+        // The String "30s" slipped into an Optional<Integer> and blew up later, at the use site.
+        // type.isInstance / type.cast check against the real class.
         <T> Optional<T> get(String key, Class<T> type) {
-            return Optional.ofNullable((T) values.get(key));
+            Object value = values.get(key);
+            return type.isInstance(value) ? Optional.of(type.cast(value)) : Optional.empty();
         }
     }
 
-    @SafeVarargs
-    static <T> T[] arrayOf(T... items) {
-        return items;
+    // Bug 2 was: inside firstTwo, T is erased to Object, so arrayOf(a, b) created an Object[].
+    // main's String[] variable got that Object[], and the compiler-inserted cast failed.
+    // A List<T> has no runtime element type to get wrong.
+    static <T> List<T> firstTwo(T a, T b, T c) {
+        return List.of(a, b);
     }
 
-    static <T> T[] firstTwo(T a, T b, T c) {
-        return arrayOf(a, b);
-    }
-
+    // Bonus: adding describe(List<Integer>) fails with "name clash: both methods have the same
+    // erasure". Both become describe(List) in bytecode, so they can't be told apart.
     static String describe(List<String> names) {
         return names.size() + " names";
     }
@@ -90,8 +93,8 @@ public class Exercise3_HeapPollutionBug {
 
         boolean firstTwoOk;
         try {
-            String[] pair = firstTwo("Pune", "Goa", "Delhi");   // FIX: use the new List<String> return type
-            firstTwoOk = pair.length == 2 && pair[0].equals("Pune") && pair[1].equals("Goa");
+            List<String> pair = firstTwo("Pune", "Goa", "Delhi");
+            firstTwoOk = pair.size() == 2 && pair.get(0).equals("Pune") && pair.get(1).equals("Goa");
         } catch (ClassCastException e) {
             System.out.println("  (firstTwo: " + e.getMessage().split(" \\(")[0] + ")");
             firstTwoOk = false;

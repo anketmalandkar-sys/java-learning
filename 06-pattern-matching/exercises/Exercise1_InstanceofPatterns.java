@@ -43,13 +43,32 @@ import java.util.function.Supplier;
 public class Exercise1_InstanceofPatterns {
 
     static String summarize(Object obj) {
-        // TODO
-        return "";
+        if (obj == null) {
+            return "nothing";
+        }
+        if (obj instanceof String s && s.isBlank()) {
+            return "empty text";
+        }
+        if (obj instanceof String s) {
+            return "text: " + s.strip();
+        }
+        if (obj instanceof Integer n) {
+            return (n % 2 == 0 ? "even" : "odd") + " number " + n;
+        }
+        if (obj instanceof List<?> list && list.isEmpty()) {
+            return "empty list";
+        }
+        if (obj instanceof List<?> list) {
+            return "list starting with " + list.get(0);
+        }
+        return "unsupported: " + obj.getClass().getSimpleName();
     }
 
     static int lengthOf(Object obj) {
-        // TODO
-        return 0;
+        if (!(obj instanceof CharSequence text)) {
+            return -1;
+        }
+        return text.length();
     }
 
     static final class Money {
@@ -63,8 +82,9 @@ public class Exercise1_InstanceofPatterns {
 
         @Override
         public boolean equals(Object o) {
-            // TODO: one return statement with an instanceof pattern
-            return false;
+            return o instanceof Money other
+                    && amount == other.amount
+                    && currency.equals(other.currency);
         }
 
         @Override

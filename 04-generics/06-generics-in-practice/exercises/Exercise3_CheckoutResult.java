@@ -65,45 +65,37 @@ public class Exercise3_CheckoutResult {
 
     record Success<T>(T value) implements Result<T> {
         public <R> Result<R> map(Function<? super T, ? extends R> mapper) {
-            // TODO
-            return null;
+            return new Success<>(mapper.apply(value));
         }
 
         public <R> Result<R> flatMap(Function<? super T, Result<R>> mapper) {
-            // TODO
-            return null;
+            return mapper.apply(value);
         }
 
         public T getOrElse(T fallback) {
-            // TODO
-            return null;
+            return value;
         }
 
         public boolean isSuccess() {
-            // TODO
-            return false;
+            return true;
         }
     }
 
     record Failure<T>(String error) implements Result<T> {
         public <R> Result<R> map(Function<? super T, ? extends R> mapper) {
-            // TODO
-            return null;
+            return new Failure<>(error);
         }
 
         public <R> Result<R> flatMap(Function<? super T, Result<R>> mapper) {
-            // TODO
-            return null;
+            return new Failure<>(error);
         }
 
         public T getOrElse(T fallback) {
-            // TODO
-            return null;
+            return fallback;
         }
 
         public boolean isSuccess() {
-            // TODO
-            return true;
+            return false;
         }
     }
 
@@ -114,23 +106,30 @@ public class Exercise3_CheckoutResult {
             "SKU-2", new Product("SKU-2", "Mouse", 599.0, 3));
 
     static Result<Integer> parseQuantity(String text) {
-        // TODO
-        return null;
+        int qty;
+        try {
+            qty = Integer.parseInt(text.strip());
+        } catch (NumberFormatException e) {
+            return Result.failure("not a number: '" + text + "'");
+        }
+        return qty < 1 ? Result.failure("quantity must be at least 1") : Result.success(qty);
     }
 
     static Result<Product> findProduct(String sku) {
-        // TODO
-        return null;
+        Product product = CATALOG.get(sku);
+        return product == null ? Result.failure("unknown product: " + sku) : Result.success(product);
     }
 
     static Result<Product> reserve(Product product, int quantity) {
-        // TODO
-        return null;
+        return quantity <= product.stock()
+                ? Result.success(product)
+                : Result.failure("only " + product.stock() + " left of " + product.name());
     }
 
     static Result<String> checkout(String sku, String quantityText) {
-        // TODO
-        return null;
+        return parseQuantity(quantityText).flatMap(qty ->
+                findProduct(sku).flatMap(product -> reserve(product, qty))
+                        .map(product -> qty + " x " + product.name() + " = " + product.price() * qty));
     }
 
     public static void main(String[] args) {

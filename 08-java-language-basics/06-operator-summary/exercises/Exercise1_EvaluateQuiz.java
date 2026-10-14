@@ -27,15 +27,14 @@ public class Exercise1_EvaluateQuiz {
 
     public static void main(String[] args) {
         boolean allPass = true;
-        // TODO: replace each "?" with your prediction
-        allPass &= check("e1", 2 + 3 * 4, "?");
-        allPass &= check("e2", 20 - 6 - 4, "?");
-        allPass &= check("e3", 20 / 4 * 5, "?");
-        allPass &= check("e4", 17 % 5 * 2, "?");
-        allPass &= check("e5", 1 << 2 + 1, "?");
-        allPass &= check("e6", 5 > 3 && 2 > 4 || 1 < 2, "?");
-        allPass &= check("e7", "A" + 1 + 2, "?");
-        allPass &= check("e8", 1 + 2 + "A" + 1 + 2, "?");
+        allPass &= check("e1", 2 + 3 * 4, "14");                       // * before +
+        allPass &= check("e2", 20 - 6 - 4, "10");                      // left to right: (20 - 6) - 4
+        allPass &= check("e3", 20 / 4 * 5, "25");                      // left to right: (20 / 4) * 5
+        allPass &= check("e4", 17 % 5 * 2, "4");                       // (17 % 5) * 2
+        allPass &= check("e5", 1 << 2 + 1, "8");                       // + before <<: 1 << 3
+        allPass &= check("e6", 5 > 3 && 2 > 4 || 1 < 2, "true");       // (true && false) || true
+        allPass &= check("e7", "A" + 1 + 2, "A12");                    // String first: all concatenation
+        allPass &= check("e8", 1 + 2 + "A" + 1 + 2, "3A12");           // 1 + 2 is math, then concatenation
         System.out.println(allPass ? "ALL PASS" : "SOME FAILED");
     }
 

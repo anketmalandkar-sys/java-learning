@@ -1,5 +1,8 @@
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -55,41 +58,46 @@ public class Exercise2_InMemoryRepository {
         List<T> findWhere(Predicate<? super T> rule);
 
         default List<T> findAllById(Collection<? extends ID> ids) {
-            // TODO (Part B)
-            return null;
+            List<T> result = new ArrayList<>();
+            for (ID id : ids) {
+                findById(id).ifPresent(result::add);
+            }
+            return result;
         }
     }
 
     static class InMemoryRepository<T extends Entity<ID>, ID> implements Repository<T, ID> {
-        // TODO: a field to store the entities
+        private final Map<ID, T> entities = new LinkedHashMap<>();
 
         @Override
         public void save(T entity) {
-            // TODO
+            entities.put(entity.id(), entity);   // replacing keeps the original position
         }
 
         @Override
         public Optional<T> findById(ID id) {
-            // TODO
-            return null;
+            return Optional.ofNullable(entities.get(id));
         }
 
         @Override
         public List<T> findAll() {
-            // TODO
-            return null;
+            return List.copyOf(entities.values());
         }
 
         @Override
         public boolean deleteById(ID id) {
-            // TODO
-            return false;
+            return entities.remove(id) != null;
         }
 
         @Override
         public List<T> findWhere(Predicate<? super T> rule) {
-            // TODO
-            return null;
+            List<T> result = new ArrayList<>();
+            for (T entity : entities.values()) {
+                if (rule.test(entity)) {
+                    result.add(entity);
+                }
+            }
+            return result;
         }
     }
 

@@ -30,7 +30,7 @@
 public class Exercise2_AddParentheses {
 
     static int average(int a, int b) {
-        return a + b / 2; // TODO
+        return (a + b) / 2;
     }
 
     static int priceWithTax(int price, int qty, int taxPercent) {
@@ -38,15 +38,15 @@ public class Exercise2_AddParentheses {
     }
 
     static int priceWithTaxShort(int price, int qty, int taxPercent) {
-        return price * qty * 100 + taxPercent / 100; // TODO: should equal priceWithTax
+        return price * qty * (100 + taxPercent) / 100;
     }
 
     static String label(String name, int x, int y) {
-        return name + ": " + x + y; // TODO
+        return name + ": " + (x + y);
     }
 
     static boolean shouldAlert(int temp, boolean isNight, boolean isWeekend) {
-        return temp > 30 && isNight || isWeekend; // TODO
+        return temp > 30 && (isNight || isWeekend);
     }
 
     public static void main(String[] args) {

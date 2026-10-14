@@ -1,6 +1,8 @@
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Exercise 2 (Medium): a Money value record.
@@ -38,26 +40,41 @@ public class Exercise2_MoneyValue {
 
     record Money(long paise, String currency) implements Comparable<Money> {
 
-        // TODO: compact constructor
+        Money {
+            if (currency == null || currency.isBlank()) {
+                throw new IllegalArgumentException("currency required");
+            }
+            currency = currency.trim().toUpperCase(Locale.ROOT);
+        }
 
         static Money of(String rupees, String currency) {
-            return null; // TODO
+            // longValueExact throws ArithmeticException if a fraction of a paisa is left ("1.234")
+            long paise = new BigDecimal(rupees).movePointRight(2).longValueExact();
+            return new Money(paise, currency);
         }
 
         Money plus(Money other) {
-            return null; // TODO
+            if (!currency.equals(other.currency)) {
+                throw new IllegalArgumentException("currency mismatch: " + currency + " vs " + other.currency);
+            }
+            return new Money(Math.addExact(paise, other.paise), currency);
         }
 
         Money times(int qty) {
-            return null; // TODO
+            return new Money(Math.multiplyExact(paise, qty), currency);
         }
 
         @Override
         public int compareTo(Money other) {
-            return 0; // TODO
+            return Long.compare(paise, other.paise);
         }
 
-        // TODO: override toString
+        @Override
+        public String toString() {
+            String sign = paise < 0 ? "-" : "";
+            long abs = Math.abs(paise);
+            return String.format("%s %s%d.%02d", currency, sign, abs / 100, abs % 100);
+        }
     }
 
     public static void main(String[] args) {

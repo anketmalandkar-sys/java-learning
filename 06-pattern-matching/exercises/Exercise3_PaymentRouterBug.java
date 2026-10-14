@@ -55,12 +55,17 @@ public class Exercise3_PaymentRouterBug {
     static class PaymentRouter {
         static String route(Payment payment) {
             return switch (payment) {
-                case Card c when c.amount() > 1_000  -> "REVIEW";
+                // Incident 3: a switch without "case null" throws NullPointerException for null.
+                case null                            -> "REJECT_MISSING";
+                // Incident 1: the > 1,000 guard came first and also matched 75,000. Strictest first.
                 case Card c when c.amount() > 50_000 -> "BLOCK";
+                case Card c when c.amount() > 1_000  -> "REVIEW";
                 case Card c                          -> "CARD_GATEWAY";
                 case Upi u                           -> "UPI_GATEWAY";
                 case NetBanking n                    -> "BANK_GATEWAY";
-                default                              -> "CARD_GATEWAY";   // "safe fallback"
+                // Incident 2: the default silently caught Crypto. Without it, the compiler
+                // reports any Payment type the switch doesn't handle.
+                case Crypto x                        -> "REJECT";
             };
         }
     }

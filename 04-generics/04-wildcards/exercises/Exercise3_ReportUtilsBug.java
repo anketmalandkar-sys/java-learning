@@ -39,22 +39,23 @@ import java.util.List;
  */
 public class Exercise3_ReportUtilsBug {
 
-    static List<? extends Number> loadDailySales() {
+    static List<Double> loadDailySales() {
         return new ArrayList<>(List.of(1200.0, 860.5, 990.0));
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    static void moveAll(List<?> from, List<?> to) {
-        ((List) to).addAll(from);
+    static <T> void moveAll(List<? extends T> from, List<? super T> to) {
+        to.addAll(from);
         from.clear();
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     static void swapFirstAndLast(List<?> list) {
-        List raw = list;
-        Object first = raw.get(0);
-        raw.set(0, raw.get(raw.size() - 1));
-        raw.set(raw.size() - 1, first);
+        swapHelper(list);
+    }
+
+    private static <T> void swapHelper(List<T> list) {
+        T first = list.get(0);
+        list.set(0, list.get(list.size() - 1));
+        list.set(list.size() - 1, first);
     }
 
     static double total(List<Double> sales) {
@@ -65,9 +66,8 @@ public class Exercise3_ReportUtilsBug {
         return sum;
     }
 
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) {
-        List<Double> sales = (List<Double>) loadDailySales();   // FIX: no cast needed once loadDailySales is fixed
+        List<Double> sales = loadDailySales();
         sales.add(1430.0);
 
         List<Double> pending = new ArrayList<>(List.of(300.0));
@@ -75,9 +75,6 @@ public class Exercise3_ReportUtilsBug {
 
         List<Number> allFigures = new ArrayList<>();
         moveAll(new ArrayList<>(List.of(5.5)), allFigures);   // Doubles into a List<Number>: must keep working
-
-        List<String> customers = new ArrayList<>(List.of("Ravi", "Meera"));
-        moveAll(customers, sales);   // DELETE once it stops compiling
 
         boolean allPass = true;
         allPass &= report("sales", sales.equals(List.of(1200.0, 860.5, 990.0, 1430.0, 300.0)));

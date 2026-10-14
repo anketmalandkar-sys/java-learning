@@ -78,33 +78,32 @@ public class Exercise2_LeakyReports {
 
     // TODO 1
     static int countRows(List<String> rows) {
-        DataSource source = new DataSource(rows);
-        int count = source.read().size();
-        source.close();
-        return count;
+        try (DataSource source = new DataSource(rows)) {
+            return source.read().size();
+        }
     }
 
     // TODO 2
     static List<String> exportReport(List<String> rows) {
-        DataSource source = new DataSource(rows);
-        Output out = new Output("output");
-        for (String row : source.read()) {
-            out.write(row.toUpperCase());
+        try (DataSource source = new DataSource(rows); Output out = new Output("output")) {
+            for (String row : source.read()) {
+                out.write(row.toUpperCase());
+            }
+            return out.written;
         }
-        source.close();
-        out.close();
-        return out.written;
     }
 
     // TODO 3
     static int exportAll(List<List<String>> batches) {
         Output audit = new Output("audit");
-        int total = 0;
-        for (List<String> batch : batches) {
-            total += exportReport(batch).size();
-            audit.write("batch of " + batch.size());
+        try (audit) {
+            int total = 0;
+            for (List<String> batch : batches) {
+                total += exportReport(batch).size();
+                audit.write("batch of " + batch.size());
+            }
+            return total;
         }
-        return total;
     }
 
     public static void main(String[] args) {

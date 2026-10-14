@@ -43,15 +43,43 @@ public class Exercise1_InventoryReport {
         }
 
         // TODO: static nested class Product
+        static class Product {
+            final String name;
+            final int stock;
+            Product(String name, int stock) {
+                this.name = name;
+                this.stock = stock;
+            }
+
+            public Boolean isLow() {
+                return stock < 5;
+            }
+
+            @Override
+            public String toString() {
+                return "%s (%s)".formatted(name, stock);
+            }
+        }
 
         void addProduct(String name, int stock) {
             // TODO
+            products.add(new Product(name, stock));
         }
 
         // TODO: inner class LowStockReport
+        class LowStockReport {
+            public List<String> lines() {
+                List<String> lines = new ArrayList<>();
+                for (Object product : products) {
+                    lines.add("Warehouse %s: %s".formatted(city, product));
+                }
+                return lines;
+            }
+        }
 
-        Object report() {   // TODO: return type LowStockReport
-            return null;
+
+        LowStockReport report() {   // TODO: return type LowStockReport
+            return new LowStockReport();
         }
     }
 
@@ -59,19 +87,16 @@ public class Exercise1_InventoryReport {
         boolean allPass = true;
 
         // uncomment:
-        // Warehouse.Product glue = new Warehouse.Product("Glue", 2);
-        // allPass &= check("product:", "Glue".equals(glue.name) && glue.stock == 2);
-        // allPass &= check("isLow:", glue.isLow() && !new Warehouse.Product("Tape", 5).isLow());
-        //
-        // Warehouse pune = new Warehouse("Pune");
-        // pune.addProduct("Glue", 2);
-        // pune.addProduct("Tape", 40);
-        // pune.addProduct("Ink", 0);
-        // List<String> lines = pune.report().lines();
-        // allPass &= check("report:", lines.equals(List.of("Warehouse Pune: Glue (2)", "Warehouse Pune: Ink (0)")));
+         Warehouse.Product glue = new Warehouse.Product("Glue", 2);
+         allPass &= check("product:", "Glue".equals(glue.name) && glue.stock == 2);
+         allPass &= check("isLow:", glue.isLow() && !new Warehouse.Product("Tape", 5).isLow());
 
-        allPass &= check("uncommented:", false);   // TODO: delete this line after uncommenting
-        System.out.println(allPass ? "ALL PASS" : "SOME FAILED");
+         Warehouse pune = new Warehouse("Pune");
+         pune.addProduct("Glue", 2);
+         //pune.addProduct("Tape", 40);
+         pune.addProduct("Ink", 0);
+         List<String> lines = pune.report().lines();
+         allPass &= check("report:", lines.equals(List.of("Warehouse Pune: Glue (2)", "Warehouse Pune: Ink (0)")));
     }
 
     static boolean check(String name, boolean ok) {

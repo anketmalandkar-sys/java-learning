@@ -35,11 +35,22 @@ import java.util.Arrays;
 public class Exercise1_ParametersAndObjects {
 
     static double average(double first, double... rest) {
-        return 0; // TODO
+        double sum = first;
+        for (double value : rest) {
+            sum = Double.sum(sum, value);
+        }
+        return sum / (rest.length + 1);
     }
 
     static void rotateRight(int[] arr) {
-        // TODO
+        if (arr.length == 0) {
+            return;
+        }
+        int last = arr[arr.length - 1];
+        for (int i = arr.length - 1; i > 0; i--) {
+            arr[i] = arr[i - 1];
+        }
+        arr[0] = last;
     }
 
     static class Customer {
@@ -50,19 +61,31 @@ public class Exercise1_ParametersAndObjects {
         }
 
         void rename(String name) {
-            name = name.strip();   // TODO: bug
+            this.name = name.strip();
         }
     }
 
     static class Discount {
+        private static final Discount NONE = new Discount(0);
+        private static final Discount TEN = new Discount(10);
+        private static final Discount HALF = new Discount(50);
+
         final int percent;
 
-        Discount(int percent) {     // TODO: private, plus a static factory of(int)
+        private Discount(int percent) {
             this.percent = percent;
         }
 
         static Discount of(int percent) {
-            return null; // TODO
+            if (percent < 0 || percent > 90) {
+                throw new IllegalArgumentException("percent must be 0..90: " + percent);
+            }
+            return switch (percent) {
+                case 0 -> NONE;
+                case 10 -> TEN;
+                case 50 -> HALF;
+                default -> new Discount(percent);
+            };
         }
     }
 
@@ -80,11 +103,11 @@ public class Exercise1_ParametersAndObjects {
         c.rename("  Asha Rao ");
         allPass &= check("rename:", "Asha Rao".equals(c.name));
 
-        Discount d25 = new Discount(25);   // TODO: Discount.of(25)
+        Discount d25 = Discount.of(25);
         Discount d95 = null;
         boolean rejected;
         try {
-            d95 = new Discount(95);         // TODO: Discount.of(95)
+            d95 = Discount.of(95);
             rejected = false;
         } catch (IllegalArgumentException e) {
             rejected = true;

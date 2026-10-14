@@ -33,10 +33,22 @@
  */
 public class Exercise2_ShippingYield {
 
-    enum Zone { LOCAL, REGIONAL, NATIONAL, INTERNATIONAL /*, EXPRESS */ }
+    enum Zone { LOCAL, REGIONAL, NATIONAL, INTERNATIONAL, EXPRESS }
 
     static int shippingCost(Zone zone, double weightKg) {
-        return 0; // TODO
+        return switch (zone) {
+            case LOCAL -> 40;
+            case REGIONAL -> {
+                int extraKg = Math.max(0, (int) Math.ceil(weightKg) - 2);
+                yield 60 + 15 * extraKg;
+            }
+            case NATIONAL -> {
+                int kg = (int) Math.ceil(weightKg);
+                yield 100 + 20 * kg;
+            }
+            case INTERNATIONAL -> throw new IllegalArgumentException("International shipping not available");
+            case EXPRESS -> 250;
+        };
     }
 
     public static void main(String[] args) {

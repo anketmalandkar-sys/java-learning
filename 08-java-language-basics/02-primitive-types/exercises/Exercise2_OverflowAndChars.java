@@ -28,11 +28,13 @@
 public class Exercise2_OverflowAndChars {
 
     static long millisInDays(int days) {
-        return days * 24 * 60 * 60 * 1000;   // TODO: bug
+        // All-int math overflowed past 2^31 before the result was widened to long.
+        // Starting with 1000L makes every multiplication happen in long.
+        return 1000L * days * 24 * 60 * 60;
     }
 
     static char shift(char letter, int steps) {
-        return letter; // TODO
+        return (char) ('a' + (letter - 'a' + steps) % 26);
     }
 
     public static void main(String[] args) {

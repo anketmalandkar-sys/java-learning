@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -53,7 +55,45 @@ public class Exercise3_ImportResolver {
 
     static String resolve(String simpleName, String currentPackage, List<String> imports,
                           Map<String, Set<String>> packages) {
-        return ""; // TODO
+        // 1. Single-type imports: "java.util.List" matches when its last part is the name.
+        Set<String> singleMatches = new HashSet<>();
+        for (String imp : imports) {
+            if (!imp.endsWith(".*") && imp.substring(imp.lastIndexOf('.') + 1).equals(simpleName)) {
+                singleMatches.add(imp);
+            }
+        }
+        if (singleMatches.size() > 1) {
+            return "ERROR: conflicting imports";
+        }
+        if (singleMatches.size() == 1) {
+            return singleMatches.iterator().next();
+        }
+
+        // 2. The current package.
+        if (packages.getOrDefault(currentPackage, Set.of()).contains(simpleName)) {
+            return currentPackage + "." + simpleName;
+        }
+
+        // 3. Wildcard imports plus the implicit java.lang.*. The key is matched exactly, so
+        //    "java.util.*" never reaches "java.util.function", and "java.util.Map.*" gives
+        //    Map's nested types but not Map itself.
+        List<String> onDemand = new ArrayList<>();
+        onDemand.add("java.lang");
+        for (String imp : imports) {
+            if (imp.endsWith(".*")) {
+                onDemand.add(imp.substring(0, imp.length() - 2));
+            }
+        }
+        Set<String> wildcardMatches = new HashSet<>();
+        for (String pkg : onDemand) {
+            if (packages.getOrDefault(pkg, Set.of()).contains(simpleName)) {
+                wildcardMatches.add(pkg + "." + simpleName);
+            }
+        }
+        if (wildcardMatches.size() > 1) {
+            return "ERROR: ambiguous";
+        }
+        return wildcardMatches.isEmpty() ? "ERROR: cannot find symbol" : wildcardMatches.iterator().next();
     }
 
     public static void main(String[] args) {

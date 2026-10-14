@@ -24,15 +24,32 @@
 public class Exercise1_TemperatureStats {
 
     static double average(int[] temps) {
-        return 0; // TODO
+        int sum = 0;
+        for (int t : temps) {
+            sum += t;
+        }
+        return (double) sum / temps.length;
     }
 
     static int max(int[] temps) {
-        return 0; // TODO
+        int max = temps[0];
+        for (int t : temps) {
+            if (t > max) {
+                max = t;
+            }
+        }
+        return max;
     }
 
     static int daysAboveAverage(int[] temps) {
-        return 0; // TODO
+        double avg = average(temps);
+        int count = 0;
+        for (int t : temps) {
+            if (t > avg) {
+                count++;
+            }
+        }
+        return count;
     }
 
     public static void main(String[] args) {

@@ -32,11 +32,13 @@
 public class Exercise3_InvoiceBugs {
 
     static double invoiceTotal(double[] prices, int[] quantities, int discountPercent) {
-        var subtotal = 0;
+        // Trap 1: "var subtotal = 0" is an int, and += silently casts each double back to int.
+        var subtotal = 0.0;
         for (var i = 0; i < prices.length; i++) {
             subtotal += prices[i] * quantities[i];
         }
-        var discountRate = discountPercent / 100;
+        // Trap 2: discountPercent / 100 is int division, so 10 / 100 was 0.
+        var discountRate = discountPercent / 100.0;
         var discount = subtotal * discountRate;
         var taxable = subtotal - discount;
         var tax = taxable * 0.18;
@@ -45,7 +47,13 @@ public class Exercise3_InvoiceBugs {
     }
 
     static String describe(double total) {
-        return ""; // TODO
+        var size = "LARGE";
+        if (total < 500) {
+            size = "SMALL";
+        } else if (total < 5000) {
+            size = "MEDIUM";
+        }
+        return size;
     }
 
     public static void main(String[] args) {

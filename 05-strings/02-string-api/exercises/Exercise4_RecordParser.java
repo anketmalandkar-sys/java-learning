@@ -37,19 +37,83 @@
 public class Exercise4_RecordParser {
 
     static boolean isValidOrderId(String id) {
-        return false; // TODO
+        if (id == null) {
+            return false;
+        }
+        // matches() must match the whole string, so no ^ or $ needed
+        return id.matches("[A-Z]{3}-\\d{4}");
     }
 
     static int intField(String line, String name) {
-        return 0; // TODO
+        String rawValue = extractFieldRaw(line, name);
+        if (rawValue == null) {
+            return -1;
+        }
+
+        try {
+            return Integer.parseInt(rawValue);
+        } catch (NumberFormatException e) {
+            return -1; // Not a valid whole number (e.g., decimals like 19.99)
+        }
     }
 
     static double doubleField(String line, String name) {
-        return 0; // TODO
+        String rawValue = extractFieldRaw(line, name);
+        if (rawValue == null) {
+            return Double.NaN;
+        }
+
+        try {
+            return Double.parseDouble(rawValue);
+        } catch (NumberFormatException e) {
+            return Double.NaN;
+        }
     }
 
     static boolean isImage(String line) {
-        return false; // TODO
+        String fileName = extractFieldRaw(line, "file");
+        if (fileName == null) {
+            return false;
+        }
+
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex == -1) {
+            return false; // No extension found
+        }
+
+        int extStart = lastDotIndex + 1;
+        return hasExtension(fileName, extStart, "png")
+                || hasExtension(fileName, extStart, "jpg")
+                || hasExtension(fileName, extStart, "gif");
+    }
+
+    // Compares the region of fileName from start to the end against ext, ignoring case, without copying it
+    private static boolean hasExtension(String fileName, int start, String ext) {
+        return fileName.length() - start == ext.length()   // "pngx" isn't "png", "" isn't "png"
+                && fileName.regionMatches(true, start, ext, 0, ext.length());
+    }
+
+    // Helper method to extract raw field value based on "|name=" up to next '|' or end
+    private static String extractFieldRaw(String line, String name) {
+        if (line == null || name == null) {
+            return null;
+        }
+
+        // Every field follows a '|', so searching for "|name=" stops "maxqty=" matching "qty"
+        String searchKey = "|" + name + "=";
+        int startIndex = line.indexOf(searchKey);
+        if (startIndex == -1) {
+            return null; // Field is missing
+        }
+
+        startIndex += searchKey.length();
+        int endIndex = line.indexOf('|', startIndex);
+
+        if (endIndex == -1) {
+            return line.substring(startIndex); // Field goes until the end of the line
+        } else {
+            return line.substring(startIndex, endIndex);
+        }
     }
 
     public static void main(String[] args) {

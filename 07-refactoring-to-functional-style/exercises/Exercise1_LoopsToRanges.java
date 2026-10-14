@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * Exercise 1 (Easy): counting loops to IntStream.
@@ -47,8 +48,7 @@ public class Exercise1_LoopsToRanges {
     }
 
     static List<Integer> squares(int n) {
-        // TODO: IntStream.rangeClosed
-        return List.of();
+        return IntStream.rangeClosed(1, n).map(i -> i * i).boxed().toList();
     }
 
     static List<Integer> stepsImperative(int start, int end, int step) {
@@ -60,8 +60,7 @@ public class Exercise1_LoopsToRanges {
     }
 
     static List<Integer> steps(int start, int end, int step) {
-        // TODO: IntStream.iterate(seed, hasNext, next)
-        return List.of();
+        return IntStream.iterate(start, i -> i <= end, i -> i + step).boxed().toList();
     }
 
     static List<Integer> powersOfTwoBelowImperative(int limit) {
@@ -76,8 +75,7 @@ public class Exercise1_LoopsToRanges {
     }
 
     static List<Integer> powersOfTwoBelow(int limit) {
-        // TODO: IntStream.iterate(seed, next) + takeWhile
-        return List.of();
+        return IntStream.iterate(1, p -> p * 2).takeWhile(p -> p < limit).boxed().toList();
     }
 
     public static void main(String[] args) {

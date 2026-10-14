@@ -39,15 +39,23 @@ public class Exercise2_FloatCompare {
     }
 
     static boolean nearlyEqual(double a, double b, double tolerance) {
-        return false; // TODO
+        return Math.abs(a - b) <= tolerance;
     }
 
     static boolean fitsBudget(double[] prices, double budget) {
-        return false; // TODO
+        double total = 0;
+        for (double p : prices) {
+            total += p;
+        }
+        return total < budget || nearlyEqual(total, budget, 1e-9);
     }
 
     static long totalCents(double[] prices) {
-        return 0; // TODO
+        long cents = 0;
+        for (double p : prices) {
+            cents += Math.round(p * 100);
+        }
+        return cents;
     }
 
     public static void main(String[] args) {

@@ -33,7 +33,36 @@ import java.util.Map;
 public class Exercise3_Calculator {
 
     enum Op {
-        ADD("+"), SUBTRACT("-"), MULTIPLY("*"), DIVIDE("/");
+        ADD("+") {
+            @Override
+            long apply(long a, long b) {
+                return a + b;
+            }
+        }, SUBTRACT("-") {
+            @Override
+            long apply(long a, long b) {
+                return a - b;
+            }
+        }, MULTIPLY("*") {
+            @Override
+            long apply(long a, long b) {
+                return a * b;
+            }
+        }, DIVIDE("/") {
+            @Override
+            long apply(long a, long b) {
+                if (b == 0) {
+                    throw new ArithmeticException("division by zero");
+                }
+                return a/b;
+            }
+        },
+        MOD("%") {
+            @Override
+            long apply(long a, long b) {
+                return a % b;
+            }
+        };;
 
         private final String symbol;
 
@@ -45,18 +74,15 @@ public class Exercise3_Calculator {
             return symbol;
         }
 
-        // TODO: make this abstract and move each case into its constant's body
-        long apply(long a, long b) {
-            return switch (this) {
-                case ADD -> a + b;
-                case SUBTRACT -> a - b;
-                case MULTIPLY -> a * b;
-                case DIVIDE -> a / b;
-            };
-        }
+        abstract long apply(long a, long b);
 
         static Op fromSymbol(String symbol) {
-            return null; // TODO
+            for (Op op : Op.values()) {
+                if (op.symbol.equals(symbol)) {
+                    return op;
+                }
+            }
+            throw new IllegalArgumentException("unknown operator: " + symbol);
         }
     }
 
@@ -64,7 +90,10 @@ public class Exercise3_Calculator {
         private final Map<Op, Integer> usage = new EnumMap<>(Op.class);
 
         long evaluate(long a, String symbol, long b) {
-            return 0; // TODO
+            Op op = Op.fromSymbol(symbol);
+            long result = op.apply(a, b);
+            usage.merge(op, 1, Integer::sum);
+            return result;
         }
 
         Map<Op, Integer> usage() {

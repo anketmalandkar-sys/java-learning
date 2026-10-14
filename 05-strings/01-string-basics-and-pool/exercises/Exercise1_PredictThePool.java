@@ -31,8 +31,8 @@ public class Exercise1_PredictThePool {
 
     // TODO: replace each false with your prediction (true or false). Q1 is first.
     static final boolean[] MY_ANSWERS = {
-            false, false, false, false, false,
-            false, false, false, false, false
+            true, false, true, true, false,
+            true, true, false, true, false
     };
 
     public static void main(String[] args) {

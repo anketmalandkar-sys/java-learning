@@ -55,33 +55,34 @@ import java.util.stream.Collectors;
 public class Exercise5_CombineAndSpecialize {
 
     static IntPredicate isEven() {
-        return n -> false; // TODO
+        return n -> n % 2 == 0;
     }
 
     static ToIntFunction<String> wordLength() {
-        return s -> -1; // TODO
+        return s -> s.strip().length();
     }
 
     static IntBinaryOperator maxOf() {
-        return (a, b) -> 0; // TODO
+        return Math::max;
     }
 
     static Predicate<String> usableTag() {
-        return Predicate.isEqual("TODO"); // TODO
+        return Predicate.not(String::isBlank).and(Predicate.not(Predicate.isEqual("draft")));
     }
 
     static Consumer<String> auditTrail(Consumer<String> record, Consumer<String> notify) {
-        return record; // TODO
+        return record.andThen(notify);
     }
 
     static Map<String, String> indexByName(List<String> names) {
-        return Map.of(); // TODO
+        return names.stream().collect(Collectors.toMap(Function.identity(), String::toUpperCase));
     }
 
     static List<String> cleanTags(List<String> tags) {
-        tags.removeIf(String::isBlank);      // TODO: crashes for List.of / Arrays.asList, and mutates the caller's list
-        tags.replaceAll(String::strip);
-        return tags;
+        List<String> copy = new ArrayList<>(tags);   // works for any list, and leaves the caller's alone
+        copy.removeIf(String::isBlank);
+        copy.replaceAll(String::strip);
+        return copy;
     }
 
     public static void main(String[] args) {

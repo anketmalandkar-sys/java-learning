@@ -37,20 +37,35 @@ import java.util.Map;
  */
 public class Exercise3_BoxingBugs {
 
+    // Bug: remove(int) picks the remove-by-INDEX overload, so 1002 was out of bounds and 1 removed
+    // the element at index 1. Boxing the argument selects remove(Object).
     static void closeTicket(List<Integer> openIds, int ticketId) {
-        openIds.remove(ticketId);
+        openIds.remove(Integer.valueOf(ticketId));
     }
 
+    // Bug: == on two Integers compares references, which only "works" for cached values
+    // (-128..127). 5000 == 5000 was false. Compare the values with equals.
     static boolean sameAssignee(Integer a, Integer b) {
-        return a != null && a == b;
+        return a != null && a.equals(b);
     }
 
+    // Bug: "cond ? Integer : int" has type int, so a null override was unboxed and threw
+    // NullPointerException. Read the value once and keep both branches as Integer.
     static Integer priorityOf(int ticketId, Map<Integer, Integer> overrides) {
-        return overrides.containsKey(ticketId) ? overrides.get(ticketId) : 3;
+        Integer override = overrides.get(ticketId);
+        return override != null ? override : Integer.valueOf(3);
     }
 
     static double averageResponseMinutes(List<Integer> minutes) {
-        return -1; // TODO
+        long sum = 0;
+        int count = 0;
+        for (Integer m : minutes) {
+            if (m != null) {
+                sum += m;
+                count++;
+            }
+        }
+        return count == 0 ? 0.0 : (double) sum / count;
     }
 
     public static void main(String[] args) {

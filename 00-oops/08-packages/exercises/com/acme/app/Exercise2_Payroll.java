@@ -2,7 +2,6 @@ package com.acme.app;
 
 import com.acme.payroll.Employee;
 import com.acme.payroll.PayrollService;
-import com.acme.payroll.TaxTable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -39,12 +38,6 @@ import java.lang.reflect.Modifier;
  * Or press the green run button next to main in IntelliJ.
  */
 public class Exercise2_Payroll {
-
-    // TODO: delete this method once the fields are private
-    static void oldStyleBonus(Employee e) {
-        e.annualRupees += 1_000_000;                          // bypasses the raise rule!
-        System.out.println("tax now " + TaxTable.taxPercentFor(e.annualRupees) + "%");
-    }
 
     public static void main(String[] args) throws Exception {
         boolean allPass = true;

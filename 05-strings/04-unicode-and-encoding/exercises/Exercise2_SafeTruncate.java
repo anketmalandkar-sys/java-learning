@@ -1,3 +1,5 @@
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 /**
@@ -43,18 +45,33 @@ public class Exercise2_SafeTruncate {
     static final String E_ACUTE = Character.toString(0x00E9);     // 2 bytes in UTF-8
 
     static String preview(String text, int maxCodePoints) {
-        // TODO
-        return null;
+        if (text.codePointCount(0, text.length()) <= maxCodePoints) {
+            return text;
+        }
+        int end = text.offsetByCodePoints(0, maxCodePoints);
+        return text.substring(0, end) + "...";
     }
 
     static String fitUtf8(String text, int maxBytes) {
-        // TODO
-        return null;
+        StringBuilder sb = new StringBuilder();
+        int used = 0;
+        for (int cp : text.codePoints().toArray()) {
+            int size = Character.toString(cp).getBytes(StandardCharsets.UTF_8).length;
+            if (used + size > maxBytes) {
+                break;
+            }
+            sb.appendCodePoint(cp);
+            used += size;
+        }
+        return sb.toString();
     }
 
     static String initial(String name) {
-        // TODO
-        return null;
+        String stripped = name.strip();
+        if (stripped.isEmpty()) {
+            return "";
+        }
+        return Character.toString(stripped.codePointAt(0)).toUpperCase(Locale.ROOT);
     }
 
     public static void main(String[] args) {

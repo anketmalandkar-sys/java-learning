@@ -30,19 +30,19 @@
 public class Exercise3_OneLiners {
 
     static boolean isLeapYear(int year) {
-        return false; // TODO
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 
     static boolean inRange(int x, int low, int high, boolean exclusive) {
-        return false; // TODO
+        return exclusive ? (low < x && x < high) : (low <= x && x <= high);
     }
 
     static boolean isPowerOfTwo(int n) {
-        return false; // TODO
+        return n > 0 && (n & (n - 1)) == 0;
     }
 
     static int sign(int n) {
-        return 99; // TODO
+        return n < 0 ? -1 : (n == 0 ? 0 : 1);
     }
 
     public static void main(String[] args) {

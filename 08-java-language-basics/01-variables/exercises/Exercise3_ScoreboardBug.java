@@ -37,18 +37,30 @@ public class Exercise3_ScoreboardBug {
 
     static class Player {
         final String name;
-        static int score;   // reported bug lives here
+        int score;   // was static: one score shared by every player
 
-        // TODO: MAX_SCORE constant
-        // TODO: shared field for the best score so far
+        static final int MAX_SCORE = 300;
+        static int bestScore = 0;   // shared across all players
 
         Player(String name) {
             this.name = name;
         }
 
         void addRound(int[] answersCorrect) {
-            // TODO: count correct answers with a local, compute points, apply bonus and cap,
-            //       update score once, and update the best score if beaten
+            int correct = 0;
+            for (int answer : answersCorrect) {
+                if (answer == 1) {
+                    correct++;
+                }
+            }
+            int points = correct * 10;
+            if (answersCorrect.length > 0 && correct == answersCorrect.length) {
+                points += 20;
+            }
+            score = Math.min(score + points, MAX_SCORE);
+            if (score > bestScore) {
+                bestScore = score;
+            }
         }
 
         int score() {
@@ -56,7 +68,7 @@ public class Exercise3_ScoreboardBug {
         }
 
         static int bestScoreSoFar() {
-            return 0; // TODO
+            return bestScore;
         }
     }
 

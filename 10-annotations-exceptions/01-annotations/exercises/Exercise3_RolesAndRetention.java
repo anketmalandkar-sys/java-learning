@@ -1,4 +1,5 @@
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -43,27 +44,35 @@ import java.util.TreeSet;
  */
 public class Exercise3_RolesAndRetention {
 
-    // TODO: fix retention, make repeatable, restrict targets
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.TYPE})
+    @Repeatable(RequiresRoles.class)
     @interface RequiresRole {
         String value();
     }
 
-    // TODO: the container annotation @RequiresRoles
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.TYPE})
+    @interface RequiresRoles {
+        RequiresRole[] value();
+    }
 
     record User(String name, Set<String> roles) { }
 
     static boolean canCall(User user, Method method) {
         RequiresRole[] roles = method.getAnnotationsByType(RequiresRole.class);
-        // TODO: fall back to the class's roles when the method has none
+        if (roles.length == 0) {
+            roles = method.getDeclaringClass().getAnnotationsByType(RequiresRole.class);
+        }
         if (roles.length == 0) {
             return true;
         }
         for (RequiresRole role : roles) {
-            if (!user.roles().contains(role.value())) {   // TODO: this demands ALL roles, not ANY
-                return false;
+            if (user.roles().contains(role.value())) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     static class LedgerService {
@@ -73,7 +82,7 @@ public class Exercise3_RolesAndRetention {
         public void closeYear() { }
 
         @RequiresRole("admin")
-        // @RequiresRole("auditor")      // TODO: uncomment once the annotation is repeatable
+        @RequiresRole("auditor")
         public void exportLedger() { }
     }
 

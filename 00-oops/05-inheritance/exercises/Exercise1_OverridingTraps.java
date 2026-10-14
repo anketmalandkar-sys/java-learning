@@ -35,7 +35,12 @@ public class Exercise1_OverridingTraps {
         final String header;
 
         Report() {
-            header = "== " + title() + " ==";
+            this("Report");
+        }
+
+        // Subclasses pass their title in, so no overridable method runs during construction.
+        Report(String title) {
+            header = "== " + title + " ==";
         }
 
         String title() {
@@ -44,15 +49,20 @@ public class Exercise1_OverridingTraps {
     }
 
     static class SalesReport extends Report {
-        private String region;
+        private final String region;
 
         SalesReport(String region) {
+            super(titleFor(region)); // static, so it doesn't need the unfinished object
             this.region = region;
+        }
+
+        private static String titleFor(String region) {
+            return "Sales " + region;
         }
 
         @Override
         String title() {
-            return "Sales " + region;
+            return titleFor(region);
         }
     }
 
@@ -71,11 +81,9 @@ public class Exercise1_OverridingTraps {
     }
 
     static class PriceTag extends Tag {
-        protected String currency;     // TODO: hides Tag.currency
-
         PriceTag(String currency, int amount) {
             super(amount);
-            this.currency = currency;
+            this.currency = currency; // now writes the one inherited Tag.currency field
         }
     }
 
@@ -110,10 +118,9 @@ public class Exercise1_OverridingTraps {
         }
     }
 
-    // TODO: your predictions
-    static final String PREDICTED_A = "?";
-    static final String PREDICTED_B = "?";
-    static final String PREDICTED_C = "?";
+    static final String PREDICTED_A = "Namaste";  // the more specific interface wins: Namaste overrides Hello
+    static final String PREDICTED_B = "Good day"; // a class method beats any interface default
+    static final String PREDICTED_C = "Hello!";   // Hello.super.hi() calls the default, then "!" is appended
 
     public static void main(String[] args) {
         boolean allPass = true;

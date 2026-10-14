@@ -47,7 +47,7 @@ public class Exercise3_ShadowAndLeak {
             this.title = title;
         }
 
-        class Note {
+        static class Note {
             final String author;
             final String text;
 
@@ -69,7 +69,7 @@ public class Exercise3_ShadowAndLeak {
             }
 
             void apply(int priority) {
-                priority = Math.min(5, priority + priority);   // TODO: shadowing bug
+                Ticket.this.priority = Math.min(5, this.priority + priority);   // TODO: shadowing bug
             }
         }
     }

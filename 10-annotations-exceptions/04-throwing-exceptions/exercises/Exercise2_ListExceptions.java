@@ -40,7 +40,30 @@ import java.util.List;
  */
 public class Exercise2_ListExceptions {
 
-    // TODO: ListException and its three subclasses
+    // Checked (extends Exception, not RuntimeException), so callers must handle or declare it
+    static class ListException extends Exception {
+        ListException(String message) {
+            super(message);
+        }
+    }
+
+    static class InvalidIndexException extends ListException {
+        InvalidIndexException(int n, int size) {
+            super("no element at " + n + " (size " + size + ")");
+        }
+    }
+
+    static class EmptyListException extends ListException {
+        EmptyListException() {
+            super("list is empty");
+        }
+    }
+
+    static class ObjectNotFoundException extends ListException {
+        ObjectNotFoundException(Object o) {
+            super(o + " not found");
+        }
+    }
 
     static class SimpleList {
         private final List<Object> items = new ArrayList<>();
@@ -49,21 +72,35 @@ public class Exercise2_ListExceptions {
             items.add(o);
         }
 
-        Object objectAt(int n) {
-            return (n < 0 || n >= items.size()) ? null : items.get(n);   // TODO
+        Object objectAt(int n) throws InvalidIndexException {
+            if (n < 0 || n >= items.size()) {
+                throw new InvalidIndexException(n, items.size());
+            }
+            return items.get(n);
         }
 
-        Object firstObject() {
-            return items.isEmpty() ? null : items.get(0);                  // TODO
+        Object firstObject() throws EmptyListException {
+            if (items.isEmpty()) {
+                throw new EmptyListException();
+            }
+            return items.get(0);
         }
 
-        int indexOf(Object o) {
-            return items.indexOf(o);                                       // TODO: -1 means "not found"
+        int indexOf(Object o) throws ObjectNotFoundException {
+            int index = items.indexOf(o);
+            if (index == -1) {
+                throw new ObjectNotFoundException(o);
+            }
+            return index;
         }
     }
 
     static String describe(SimpleList list, int n) {
-        return "item: " + list.objectAt(n);                                // TODO
+        try {
+            return "item: " + list.objectAt(n);
+        } catch (ListException e) {   // the base type catches the whole family
+            return "problem: " + e.getMessage();
+        }
     }
 
     public static void main(String[] args) throws Exception {

@@ -43,19 +43,38 @@ public class Exercise1_FailFast {
         private int rating;
 
         Playlist(String name) {
-            this.name = name;      // TODO: validate
+            if (name == null) {
+                throw new NullPointerException("name");
+            }
+            if (name.isBlank()) {
+                throw new IllegalArgumentException("name must not be blank");
+            }
+            this.name = name;
         }
 
         void add(String song) {
-            songs.add(song);       // TODO: validate
+            if (song == null) {
+                throw new NullPointerException("song");
+            }
+            if (locked) {
+                throw new IllegalStateException("playlist " + name + " is locked");
+            }
+            if (songs.size() >= MAX_SONGS) {
+                throw new IllegalStateException("playlist " + name + " is full");
+            }
+            songs.add(song);
         }
 
         String songAt(int index) {
-            return index < songs.size() ? songs.get(index) : null;   // TODO: fail instead of returning null
+            Objects.checkIndex(index, songs.size());
+            return songs.get(index);
         }
 
         void setRating(int rating) {
-            this.rating = rating;  // TODO: validate
+            if (rating < 1 || rating > 5) {
+                throw new IllegalArgumentException("rating must be 1..5: " + rating);
+            }
+            this.rating = rating;
         }
 
         void lock() {

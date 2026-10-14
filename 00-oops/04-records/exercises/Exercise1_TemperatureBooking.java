@@ -31,20 +31,46 @@
 public class Exercise1_TemperatureBooking {
 
     // TODO: replace these placeholders with the real records
-    record Temperature() { }
-    record Booking() { }
+    record Temperature(double celsius) {
+        Temperature {
+            if (celsius < -273.15) {
+                throw new IllegalArgumentException("below absolute zero: " + celsius);
+            }
+        }
+
+        public double fahrenheit() {
+            return (celsius * 9 / 5) + 32;
+        }
+
+        static Temperature fromFahrenheit(double f) {
+            double celsius = (f - 32) * 5 / 9;
+            return new Temperature(celsius);
+        }
+    }
+    record Booking(String guest, int nights) {
+        Booking {
+            if (nights < 1) {
+                throw new IllegalArgumentException("nights must be at least 1");
+            }
+            guest = guest.strip();
+        }
+
+        Booking(String guest) {
+            this(guest, 1);
+        }
+    }
 
     public static void main(String[] args) {
         boolean allPass = true;
         // uncomment:
-        // allPass &= check("temperature:", new Temperature(100).fahrenheit() == 212
-        //         && Math.abs(Temperature.fromFahrenheit(32).celsius()) < 1e-9);
-        // allPass &= check("absolute 0:", rejects(() -> new Temperature(-300), "below absolute zero: -300.0"));
-        // allPass &= check("booking:", new Booking("  Asha ", 2).guest().equals("Asha")
-        //         && new Booking("Ravi").nights() == 1 && rejects(() -> new Booking("Zoya", 0), "nights must be at least 1"));
-        // allPass &= check("equality:", new Booking("Asha", 2).equals(new Booking(" Asha", 2))
-        //         && new Booking("Asha", 2).toString().equals("Booking[guest=Asha, nights=2]"));
-        allPass &= check("uncommented:", false);   // TODO: delete this line after uncommenting
+         allPass &= check("temperature:", new Temperature(100).fahrenheit() == 212
+                 && Math.abs(Temperature.fromFahrenheit(32).celsius()) < 1e-9);
+         allPass &= check("absolute 0:", rejects(() -> new Temperature(-300), "below absolute zero: -300.0"));
+         allPass &= check("booking:", new Booking("  Asha ", 2).guest().equals("Asha")
+                 && new Booking("Ravi").nights() == 1 && rejects(() -> new Booking("Zoya", 0), "nights must be at least 1"));
+         allPass &= check("equality:", new Booking("Asha", 2).equals(new Booking(" Asha", 2))
+                 && new Booking("Asha", 2).toString().equals("Booking[guest=Asha, nights=2]"));
+        //allPass &= check("uncommented:", false);   // TODO: delete this line after uncommenting
         System.out.println(allPass ? "ALL PASS" : "SOME FAILED");
     }
 

@@ -33,19 +33,25 @@
 public class Exercise2_SafeChecks {
 
     static boolean hasText(String s) {
-        return false; // TODO
+        return s != null && !s.isBlank();
     }
 
     static boolean canRent(int age, boolean hasLicense, boolean hasCard) {
-        return false; // TODO
+        return age >= 21 && hasLicense && (hasCard || age >= 25);
     }
 
     static int ticketPrice(int age) {
-        return -1; // TODO
+        return age < 5 ? 0
+                : age < 18 ? 50
+                : age < 60 ? 120
+                : 60;
     }
 
     static String describe(Object value) {
-        return ""; // TODO
+        return value == null ? "nothing"
+                : value instanceof String s ? "text of length " + s.length()
+                : value instanceof Integer n ? "number " + n
+                : "unknown";
     }
 
     public static void main(String[] args) {

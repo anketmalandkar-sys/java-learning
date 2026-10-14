@@ -34,15 +34,44 @@
 public class Exercise3_NestedLoops {
 
     static int[] findFirstFree(int[][] hall) {
-        return null; // TODO
+        int[] found = null;
+        rows:
+        for (int r = 0; r < hall.length; r++) {
+            for (int s = 0; s < hall[r].length; s++) {
+                if (hall[r][s] == 0) {
+                    found = new int[] {r, s};
+                    break rows;   // leaves BOTH loops
+                }
+            }
+        }
+        return found;
     }
 
     static int rowsWithAllFree(int[][] hall) {
-        return -1; // TODO
+        int count = 0;
+        rows:
+        for (int[] row : hall) {
+            for (int seat : row) {
+                if (seat == 1) {
+                    continue rows;   // skip to the next row
+                }
+            }
+            count++;
+        }
+        return count;
     }
 
     static int[] findBlock(int[][] hall, int size) {
-        return null; // TODO
+        for (int r = 0; r < hall.length; r++) {
+            int run = 0;
+            for (int s = 0; s < hall[r].length; s++) {
+                run = hall[r][s] == 0 ? run + 1 : 0;
+                if (run == size) {
+                    return new int[] {r, s - size + 1};
+                }
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) {

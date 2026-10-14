@@ -29,19 +29,26 @@
 public class Exercise1_ParseAndConvert {
 
     static int parseOrDefault(String text, int fallback) {
-        return 0; // TODO
+        if (text == null) {
+            return fallback;
+        }
+        try {
+            return Integer.parseInt(text.strip());
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
     }
 
     static String toBinary(int n) {
-        return ""; // TODO
+        return Integer.toBinaryString(n);
     }
 
     static int fromHex(String text) {
-        return 0; // TODO
+        return Integer.parseInt(text, 16);
     }
 
     static String colorToHex(int r, int g, int b) {
-        return ""; // TODO
+        return String.format("#%02x%02x%02x", r, g, b);
     }
 
     public static void main(String[] args) {

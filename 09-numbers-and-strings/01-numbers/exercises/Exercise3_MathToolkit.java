@@ -38,23 +38,30 @@ import java.util.Random;
 public class Exercise3_MathToolkit {
 
     static int pageCount(int items, int perPage) {
-        return 0; // TODO
+        return (int) Math.ceil((double) items / perPage);
     }
 
     static double roundToStep(double value, double step) {
-        return 0; // TODO
+        return Math.round(value / step) * step;
     }
 
     static double distance(double x1, double y1, double x2, double y2) {
-        return 0; // TODO
+        return Math.hypot(x2 - x1, y2 - y1);
     }
 
     static double bearingDegrees(double dx, double dy) {
-        return -1; // TODO
+        double degrees = Math.toDegrees(Math.atan2(dy, dx));   // -180..180
+        return (degrees + 360) % 360;
     }
 
     static int rollUntil(Random rng, int target) {
-        return 0; // TODO
+        int rolls = 0;
+        int face;
+        do {
+            face = rng.nextInt(6) + 1;
+            rolls++;
+        } while (face != target);
+        return rolls;
     }
 
     public static void main(String[] args) {

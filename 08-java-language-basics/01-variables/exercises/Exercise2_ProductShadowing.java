@@ -24,22 +24,24 @@
 public class Exercise2_ProductShadowing {
 
     static class Product {
-        // TODO: add the TAX_RATE constant (0.18)
+        static final double TAX_RATE = 0.18;
 
         String name;
         double price;
 
+        // The parameters shadow the fields: plain 'price' means the parameter, so
+        // 'price = price' assigned the parameter to itself. 'this.' names the field.
         Product(String name, double price) {
-            name = name;     // TODO: bug
-            price = price;   // TODO: bug
+            this.name = name;
+            this.price = price;
         }
 
         void setPrice(double price) {
-            price = price;   // TODO: bug
+            this.price = price;
         }
 
         double priceWithTax() {
-            return price + price * 0.18;   // TODO: use the constant
+            return price + price * TAX_RATE;
         }
     }
 

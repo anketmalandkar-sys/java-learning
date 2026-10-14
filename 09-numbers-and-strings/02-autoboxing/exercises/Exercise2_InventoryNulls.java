@@ -36,21 +36,24 @@ public class Exercise2_InventoryNulls {
 
     static Map<String, Integer> stock = new HashMap<>();
 
+    // Unboxing a null Integer throws NullPointerException. Covers both a missing key and an
+    // explicit null value (getOrDefault alone would still return the null).
     static int stockOf(String product) {
-        return stock.get(product); // TODO: crashes for unknown products
+        Integer count = stock.get(product);
+        return count == null ? 0 : count;
     }
 
     static boolean canSell(String product, int qty) {
-        return stock.get(product) >= qty; // TODO
+        return stockOf(product) >= qty;
     }
 
     static void restock(String product, int qty) {
-        stock.put(product, stock.get(product) + qty); // TODO
+        stock.put(product, stockOf(product) + qty);
     }
 
     static boolean sell(String product, int qty) {
-        Integer current = stock.get(product);
-        if (current >= qty) { // TODO
+        int current = stockOf(product);
+        if (current >= qty) {
             stock.put(product, current - qty);
             return true;
         }
@@ -60,7 +63,9 @@ public class Exercise2_InventoryNulls {
     static int totalStock() {
         int total = 0;
         for (Integer count : stock.values()) {
-            total += count; // TODO
+            if (count != null) {
+                total += count;
+            }
         }
         return total;
     }

@@ -1,4 +1,7 @@
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -46,12 +49,32 @@ public class Exercise2_OrderLineParser {
 
     static Order parse(String line) {
         // TODO
-        return null;
+        if (Objects.isNull(line) || line.trim().isEmpty() || line.trim().toLowerCase(Locale.ROOT).startsWith("id")) return null;
+        String[] words = line.split("\\|", -1);
+        if (words.length != 4) return null;
+        return new  Order(words[0].strip(), words[1].strip(), Double.parseDouble(words[2]), words[3].strip());
     }
 
     static String format(Order order) {
-        // TODO
-        return null;
+        if (order == null) {
+            return "";
+        }
+
+        // Format the core fields:
+        // %-6s  -> id left-aligned in 6 characters, followed by a space
+        // %-12s -> customer left-aligned in 12 characters, followed by a space
+        // %,10.2f -> amount right-aligned in 10 characters, with 2 decimals and thousands separators
+        String core = String.format("%-6s %-12s %,10.2f",
+                order.id(),
+                order.customer(),
+                order.amount());
+
+        // Append note only if it's not empty, ensuring no trailing spaces when empty
+        if (order.note() != null && !order.note().isEmpty()) {
+            return core + " " + order.note();
+        }
+
+        return core;
     }
 
     public static void main(String[] args) {

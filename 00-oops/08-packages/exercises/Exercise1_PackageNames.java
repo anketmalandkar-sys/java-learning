@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+
 /**
  * Exercise 1 (Easy): package naming conventions.
  *
@@ -48,11 +53,31 @@ public class Exercise1_PackageNames {
     };
 
     static String packageFor(String domain, String project) {
-        return ""; // TODO
+        String[] domainParts = domain.toLowerCase(Locale.ROOT).split("\\.");
+        List<String> parts = new ArrayList<>();
+        for (int i = domainParts.length - 1; i >= 0; i--) {   // reverse: shop.example.com -> com.example.shop
+            parts.add(fixPart(domainParts[i]));
+        }
+        parts.add(fixPart(project.toLowerCase(Locale.ROOT)));
+        return String.join(".", parts);
+    }
+
+    // Turns one name part into a valid identifier.
+    private static String fixPart(String part) {
+        String fixed = part.replace('-', '_');
+        if (Character.isDigit(fixed.charAt(0))) {
+            fixed = "_" + fixed;
+        }
+        if (Arrays.asList(KEYWORDS).contains(fixed)) {
+            fixed = fixed + "_";
+        }
+        return fixed;
     }
 
     static boolean isReserved(String packageName) {
-        return false; // TODO
+        // "javafx" must NOT match, so check for the dot, not just the "java" prefix
+        return packageName.equals("java") || packageName.equals("javax")
+                || packageName.startsWith("java.") || packageName.startsWith("javax.");
     }
 
     public static void main(String[] args) {
